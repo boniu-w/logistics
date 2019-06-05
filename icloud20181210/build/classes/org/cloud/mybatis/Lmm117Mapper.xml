@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm117Mapper">
+
+	<select id="findAll" resultType="hashmap">
+		select * from LMMMTRKARVDPT pt
+
+		left join LMMMORG rg
+		on pt.tntcod=rg.tntcod
+		and rg.appstaymdhms &lt;=sysdate
+		and sysdate &lt;=rg.appendymdhms
+		and rg.aboflg=0
+
+		left join lmmmplc plc1
+		on plc1.tntcod=pt.tntcod
+		and plc1.plccod=pt.sipplccod
+		and plc1.aboflg=0
+
+		left join lmmmplc plc2
+		on plc2.tntcod=pt.tntcod
+		and plc2.plccod=pt.fnlplccod
+		and plc2.aboflg=0
+
+		left join lmmmtrkg trkg
+		on trkg.tntcod=pt.tntcod
+		and
+		trkg.trkgrpcod=pt.trkgrpcod
+		and trkg.aboflg=0
+
+		left join lmmmgrl grl
+		on grl.gnrprpkbn='5002'
+		and grl.gnrprpcod=pt.mtrsmdkbn
+		and grl.aboflg=0
+	</select>
+	
+	<resultMap type="org.cloud.dto.Lmm117ResultType" id="lmm117ResultType">
+		<result column="aboflg" property="aboflg"/>
+		<result column="apporgcod" property="apporgcod"/>
+		<result column="plcnam_from" property="plcnam_from"/>
+		<result column="plcnam_goto" property="plcnam_goto"/>
+		<result column="mtrsmdkbn" property="mtrsmdkbn"/>
+		<result column="trkgrpnam" property="trkgrpnam"/>
+	</resultMap>
+	
+	<select id="findSomeField" resultMap="lmm117ResultType" parameterType="java.util.Map">
+		select 
+		  pt.aboflg,
+		  pt.apporgcod,
+		  plc1.plcnam as plcnam_from,
+		  plc2.plcnam as plcnam_goto,
+		  pt.mtrsmdkbn,
+		  trkg.trkgrpnam
+		from LMMMTRKARVDPT pt
+
+		left join LMMMORG rg
+		on pt.tntcod=rg.tntcod
+		and rg.appstaymdhms &lt;=sysdate
+		and sysdate &lt;=rg.appendymdhms
+		and rg.aboflg=#{aboflag}
+
+		left join lmmmplc plc1
+		on plc1.tntcod=pt.tntcod
+		and plc1.plccod=pt.sipplccod
+		and plc1.aboflg=#{aboflag}
+
+		left join lmmmplc plc2
+		on plc2.tntcod=pt.tntcod
+		and plc2.plccod=pt.fnlplccod
+		and plc2.aboflg=#{aboflag}
+
+		left join lmmmtrkg trkg
+		on trkg.tntcod=pt.tntcod
+		and trkg.trkgrpcod=pt.trkgrpcod
+		and trkg.aboflg=#{aboflag}
+
+		left join lmmmgrl grl
+		on grl.gnrprpkbn=#{gnrprpkbn}
+		and grl.gnrprpcod=pt.mtrsmdkbn
+		and grl.aboflg=#{aboflag}
+		
+		<where>
+			<!--検索範囲が「廃止を除く」の場合 off -->
+				pt.aboflg =#{aboflag}
+			<!-- 申請組織コード -->
+			<if test="appOrgCode_Txt != '' and appOrgCode_Txt !=null ">
+				and pt.apporgcod= #{appOrgCode_Txt}
+			</if>
+			<!-- 主輸送モード区分-->
+			<if test="mainTransportationModeKbn_Sct != '' and mainTransportationModeKbn_Sct !=null ">
+				and pt.mtrsmdkbn = #{mainTransportationModeKbn_Sct}
+			</if>
+			<!-- 出荷場所コード -->
+			<if test="shipmentPlaceCode_Txt !='' and shipmentPlaceCode_Txt !=null  ">
+				and pt.sipplccod= #{shipmentPlaceCode_Txt}
+			</if>
+			<!-- 出荷場所名 -->
+			<if test="shipmentPlaceName_Txt != '' and shipmentPlaceName_Txt !=null ">
+				and plc1.plcnam like '%${shipmentPlaceName_Txt}%'
+			</if>
+			<!-- 最終届先cod -->
+			<if test="finalDestinationCode_Txt != '' and finalDestinationCode_Txt !=null ">
+				and pt.fnlplccod= #{finalDestinationCode_Txt}
+			</if>
+			<!-- 最終届先場所名 -->
+			<if test="finalDestinationName_Txt != '' and finalDestinationName_Txt !=null ">
+				and plc2.plcnam like '%'||#{finalDestinationName_Txt}||'%'
+			</if>
+			<!-- トラッキンググループコード -->
+			<if test="trackingGCode_Txt != '' and trackingGCode_Txt !=null ">
+				and pt.trkgrpcod = #{trackingGCode_Txt}
+			</if>
+			<!-- トラッキングＧ名称欄に入力値がある場合 -->
+			<if test="trackingGName_Txt  !='' and trackingGName_Txt !=null ">
+				and trkg.trkgrpnam like CONCAT(CONCAT('%',#{trackingGName_Txt}),'%')
+			</if>
+		</where>
+	</select>
+
+</mapper>

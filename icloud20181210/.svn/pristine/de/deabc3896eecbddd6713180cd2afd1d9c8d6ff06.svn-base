@@ -1,0 +1,330 @@
+package org.cloud.webapp.controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.Constants;
+import org.cloud.dto.Lmm110DtoTo;
+import org.cloud.model.Lmmmitm;
+import org.cloud.model.Lmmmorg;
+import org.cloud.service.Lmm110Service;
+import org.cloud.webapp.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.util.MessageSource;
+
+/**
+ * @作者 霍五星
+ * @时间 2019/05/22 11:51:00
+ * @位置 河南省郑州市高新区河南八六三软件园 
+ * @用途
+ */
+@Controller
+@RequestMapping(value="/lmm110Controller")
+public class Lmm110Controller extends BaseController{
+	//lmm101Serviceの自動注入
+	@Autowired
+	private Lmm110Service lmm110Service;
+	private static String tntcod = null;
+	private static String usrcod = null;
+	private static String itmcod = null;
+	
+	/**
+	 * 商品メンテナンス画面の初期化処理
+	 * @param tntcod	メンテコード
+	 * @param itmcod	商品コード
+	 * @param updeac	更新回数
+	 * @param modFlg	モードフラグ
+	 * @param req		HttpServletRequest
+	 * @return
+	 */
+	@RequestMapping(value="/init")
+	public ModelAndView init(String modFlg, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		//创建一个lmm110DtoTo对象，用于将值返回到前台页面
+		Lmm110DtoTo lmm110 = new Lmm110DtoTo();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		//获取session
+		HttpSession session = req.getSession();
+		//获取メンテコード
+		tntcod = (String)session.getAttribute("tntncod");
+		tntcod = "01001006";
+		//获取ユーザコード
+		usrcod = (String)session.getAttribute("usrcod");
+		usrcod = "霍五星";
+		//获取商品コード
+		itmcod = (String)session.getAttribute("itmcod");
+		//如果modFlg标志为0，表示新规
+		if ("0".equals(modFlg)) {
+			//将適用開始日時设置为当前系统时间
+			lmm110.setAppStaYmd_Txt(sdf.format(new Date()));
+			lmm110.setAppStaHh_Txt(new SimpleDateFormat("HH").format(new Date()));
+			lmm110.setAppStaMm_Txt(new SimpleDateFormat("mm").format(new Date()));
+			//将適用終了日時设置为当前系统时间
+			lmm110.setAppEndYmd_Txt(sdf.format(new Date()));
+			lmm110.setAppEndHh_Txt(new SimpleDateFormat("HH").format(new Date()));
+			lmm110.setAppEndMm_Txt(new SimpleDateFormat("mm").format(new Date()));
+			//如果modFlg标志为1，表示更新
+		}else if ("1".equals(modFlg)){
+			String format = "2019-05-02 20:24:00";
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			itmcod = "shangpin111";
+			Lmmmitm lmmmitm = null;
+			try {
+				lmmmitm = lmm110Service.updateSelect(tntcod, itmcod, sdf.parse(format));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			//设置前回更新ユーザコード
+			lmm110.setUpdateUserCode_Lbl(lmmmitm.getUpdnam());
+			//设置前回更新日時
+			lmm110.setUpdateYmdhm_Lbl(new SimpleDateFormat("yyyy/MM/dd HH:mm").format(lmmmitm.getUpdymdhms()));
+			//设置商品コード
+			lmm110.setItemCode_Txt(lmmmitm.getItmcod());
+			//设置適用開始日·年月日
+			lmm110.setAppStaYmd_Txt(format.substring(0, 10));
+			//设置適用開始日時・時
+			lmm110.setAppStaHh_Txt(new SimpleDateFormat("HH").format(lmmmitm.getAppstaymdhms()));
+			//设置適用開始日時・分
+			lmm110.setAppStaMm_Txt(new SimpleDateFormat("mm").format(lmmmitm.getAppstaymdhms()));
+			//设置適用終了日時・年月日
+			lmm110.setAppEndYmd_Txt(sdf.format(lmmmitm.getAppendymdhms()).substring(0, 10));
+			//设置適用終了日時・時
+			lmm110.setAppEndHh_Txt(new SimpleDateFormat("HH").format(lmmmitm.getAppendymdhms()));
+			//设置適用終了日時・分
+			lmm110.setAppEndMm_Txt(new SimpleDateFormat("mm").format(lmmmitm.getAppendymdhms()));
+			//设置商品名
+			lmm110.setItemName_Txt(lmmmitm.getItmnam1());
+			//设置申請組織コード
+			lmm110.setAppOrgCod_Txt(lmmmitm.getApporgcod());
+			//设置廃止フラグ
+			lmm110.setAboFlg_Chk(lmmmitm.getAboflg());
+			//设置更新回数
+			lmm110.setUpdEac_Hdn(lmmmitm.getUpdeac());
+		}else {
+			this.saveMessage(MessageSource.getText(req, "LVB-009001"));
+		}
+		mav.addObject("tntcod",tntcod);
+		mav.addObject("modFlg",modFlg);
+		mav.addObject("lmm110",lmm110);
+		mav.setViewName("/lmm110/lmm110");
+		return mav;
+	}
+
+	/**
+	 * 修改商品マスタ信息
+	 * @param lmm110	商品マスタクラス
+	 * @param req		HttpServletRequest
+	 * @return
+	 */
+	@RequestMapping(value="update",produces="text/html; charset=UTF-8")
+	public ModelAndView update(Lmm110DtoTo lmm110, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		//日期格式化
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+		Date appStaYmd_Txt = null;
+		Date appEndYmd_Txt = null;
+		try {
+			appStaYmd_Txt = sdf.parse(lmm110.getAppStaYmd_Txt()+"-"+lmm110.getAppStaHh_Txt()+":"+lmm110.getAppStaMm_Txt());
+			appEndYmd_Txt = sdf.parse(lmm110.getAppEndYmd_Txt()+"-"+lmm110.getAppEndHh_Txt()+":"+lmm110.getAppEndMm_Txt());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		//创建一个Lmmmitm对象，以便向后台数据库传值
+		Lmmmitm lmmmitm = new Lmmmitm();
+		
+		/*//適用開始日時、適用終了日時のチェック
+		int result = lgc209("0002","lmmmitm",{"tntcod","itmcod"},lmm110.getAppStaYmd_Txt(),lmm110.getAppEndYmd_Txt(),DB.connection());
+		String message = null;
+		switch(result) {
+			case 98:message = "LVB-004002";break;
+			case 99:message = "LVB-004022";break;
+			default:break;
+		}
+		if(message!=null) {
+			this.saveMessage(MessageSource.getText(req,message));
+			return new ModelAndView("redirect:init?modFlg=1&itmcod=shangpin111");
+		}*/
+		
+		//登録の結果、処理日時点の有効データが存在しなくなる場合、ウォーニング（更新はする）のチェック
+		int resultOfDate1 = appStaYmd_Txt.compareTo(new Date());
+		int resultOfDate2 = appEndYmd_Txt.compareTo(new Date());
+		if(resultOfDate1>0||resultOfDate2<0) {
+			this.saveMessage(MessageSource.getText(req, "LVB-004044"));
+			return new ModelAndView("redirect:init?modFlg=1");
+		}
+		
+		//申請組織が未登録の場合エラー
+		int checkApporgcod = lmm110Service.checkApporgcod(tntcod, lmm110.getAppOrgCod_Txt(), appStaYmd_Txt, appEndYmd_Txt);
+		if(checkApporgcod==0) {
+			this.saveMessage(MessageSource.getText(req, "LVB-004023", new String[]{"申請組織コード", "組織マスタ"}));
+			return new ModelAndView("redirect:init?modFlg=1");
+		}
+		
+		//设置テナントコード
+		lmmmitm.setTntcod(tntcod);
+		//更新者に設定する
+		lmmmitm.setUpdnam(usrcod);
+		//年月日時分秒に設定する
+		lmmmitm.setUpdymdhms(new Date());
+		//设置商品コード
+		lmmmitm.setItmcod(lmm110.getItemCode_Txt());
+		//设置適用開始日時分秒
+		lmmmitm.setAppstaymdhms(appStaYmd_Txt);
+		//设置適用終了日時分秒
+		lmmmitm.setAppendymdhms(appEndYmd_Txt);
+		//设置商品名
+		lmmmitm.setItmnam1(lmm110.getItemName_Txt());
+		//设置申請組織コード
+		lmmmitm.setApporgcod(lmm110.getAppOrgCod_Txt());
+		//设置廃止フラグ
+		lmmmitm.setAboflg(lmm110.getAboFlg_Chk()==null?Constants.ABOFLG_OFF:Constants.ABOFLG_ON);
+		//设置更新回数
+		lmmmitm.setUpdeac(lmm110.getUpdEac_Hdn());
+		//设置更新者区分
+		lmmmitm.setUpdkbn("");
+		//设置更新方法区分
+		lmmmitm.setUpdmethodkbn("0001");
+		int update = lmm110Service.update(lmmmitm);
+		if(update==0) {
+			this.saveMessage(MessageSource.getText(req,"LVB-005010"));
+		}
+		if(update>0) {
+			this.saveMessage(MessageSource.getText(req,"LVB-000004"));
+			mav.setViewName("../../index");
+			/*mav.setViewName("/lmm109Controller/init");*/
+		}
+		return mav;
+	}
+	
+	/**
+	 * 向商品マスタ添加数据
+	 * @param lmm110	商品マスタクラス
+	 * @param req		HttpServletRequest
+	 * @return
+	 */
+	@RequestMapping(value="/insert")
+	public ModelAndView insert(Lmm110DtoTo lmm110, HttpServletRequest req) {
+		//日期格式化
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm");
+		Date appStaYmd_Txt = null;
+		Date appEndYmd_Txt = null;
+		try {
+			appStaYmd_Txt = sdf.parse(lmm110.getAppStaYmd_Txt()+"-"+lmm110.getAppStaHh_Txt()+":"+lmm110.getAppStaMm_Txt());
+			appEndYmd_Txt = sdf.parse(lmm110.getAppEndYmd_Txt()+"-"+lmm110.getAppEndHh_Txt()+":"+lmm110.getAppEndMm_Txt());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		/*//適用開始日時、適用終了日時のチェック
+		int result = lgc209("0001","lmmmitm",{"tntcod","itmcod"},lmm110.getAppStaYmd_Txt(),lmm110.getAppEndYmd_Txt(),DB.connection());
+		String message = null;
+		switch(result) {
+			case 98:message = "LVB-004002";break;
+			case 99:message = "LVB-004022";break;
+			default:break;
+		}
+		if(message!=null) {
+			this.saveMessage(MessageSource.getText(req,message));
+			return new ModelAndView("redirect:init?modFlg=0");
+		}*/
+		
+		//登録の結果、処理日時点の有効データが存在しなくなる場合、ウォーニング（更新はする）のチェック
+		int resultOfDate1 = appStaYmd_Txt.compareTo(new Date());
+		int resultOfDate2 = appEndYmd_Txt.compareTo(new Date());
+		if(resultOfDate1>0||resultOfDate2<0) {
+			this.saveMessage(MessageSource.getText(req, "LVB-004044"));
+			return new ModelAndView("redirect:init?modFlg=0");
+		}
+		
+		//入力データが登録済みの場合エラー
+		int insertSelect = lmm110Service.checkItmcod(tntcod, lmm110.getItemCode_Txt(), appStaYmd_Txt);
+		if(insertSelect>0) {
+			this.saveMessage(MessageSource.getText(req, "LVB-005005"));
+			return new ModelAndView("redirect:init?modFlg=0");
+		}
+		
+		//申請組織が未登録の場合エラー
+		int checkApporgcod = lmm110Service.checkApporgcod(tntcod, lmm110.getAppOrgCod_Txt(), appEndYmd_Txt, appEndYmd_Txt);
+		if(checkApporgcod==0) {
+			this.saveMessage(MessageSource.getText(req, "LVB-004023", new String[]{"申請組織コード", "組織マスタ"}));
+			return new ModelAndView("redirect:init?modFlg=0");
+		}
+		
+		//登録処理(登録方法区分、ユーザコード)
+		/*Lgc lgc = lgc211();
+		String insmethodkbn = lgc.getInsmethodkbn();*/
+		String insmethodkbn = "0000";
+		/*HttpSession session = req.getSession();
+		String usrcod = (String)session.getAttribute("usrcod");*/
+		String inscod = usrcod;
+		//创建一个Lmmmitm对象，以便向后台数据库传值
+		Lmmmitm lmmmitm = new Lmmmitm();
+		//设置テナントコード
+		lmmmitm.setTntcod(tntcod);
+		//设置更新者
+		lmmmitm.setUpdnam(inscod);
+		//设置更新年月日時分秒
+		lmmmitm.setUpdymdhms(new Date());
+		//设置商品コード
+		lmmmitm.setItmcod(lmm110.getItemCode_Txt());
+		//设置適用開始日·年月日
+		lmmmitm.setAppstaymdhms(appStaYmd_Txt);
+		//设置適用終了日·年月日
+		lmmmitm.setAppendymdhms(appEndYmd_Txt);
+		//设置商品名
+		lmmmitm.setItmnam1(lmm110.getItemName_Txt());
+		//设置申請組織コード
+		lmmmitm.setApporgcod(lmm110.getAppOrgCod_Txt());
+		//设置廃止フラグ
+		lmmmitm.setAboflg(lmm110.getAboFlg_Chk()==null?Constants.ABOFLG_OFF:Constants.ABOFLG_ON);
+		//设置登録年月日時分秒
+		lmmmitm.setInsymdhms(new Date());
+		//设置登録者
+		lmmmitm.setInsnam(usrcod);
+		//设置登録者区分
+		lmmmitm.setInskbn("");
+		//设置登録方法区分
+		lmmmitm.setInsmethodkbn(insmethodkbn);
+		//设置更新回数
+		lmmmitm.setUpdeac(1);
+		//设置更新者区分
+		lmmmitm.setUpdkbn("");
+		//设置更新方法区分
+		lmmmitm.setUpdmethodkbn("0000");
+		int insert = lmm110Service.insert(lmmmitm);
+		if(insert==1) {
+			this.saveMessage(MessageSource.getText(req, "LVB-000003"));
+		}
+		return new ModelAndView("redirect:init?modFlg=0");
+	}
+	
+	/**
+	 * 組織コードに基づいて組織名を検索する
+	 * @param orgcod	組織コード
+	 * @param req		HttpServletRequest
+	 * @return
+	 */
+	@RequestMapping(value="/selectOrg")
+	public ModelAndView selectOrg(String orgcod, String orgNam1_Txt, HttpServletRequest req) {
+		ModelAndView mav = new ModelAndView();
+		//セッション
+		HttpSession session = req.getSession();
+		String tntcod = (String)session.getAttribute("tntcod");
+		tntcod = "01001006";
+		//組織コードに基づいて組織名を検索する
+		List<Lmmmorg> orgs = lmm110Service.selectOrg(tntcod, orgcod, orgNam1_Txt);
+		mav.addObject("orgcod", orgcod);
+		mav.addObject("orgnam1", orgNam1_Txt);
+		mav.addObject("list", orgs);
+		mav.setViewName("/slvb110/slvb110");
+		return mav;
+	}
+}

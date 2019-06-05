@@ -1,0 +1,325 @@
+package org.cloud.webapp.controller;
+
+import java.io.UnsupportedEncodingException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import org.Constants;
+import org.cloud.dto.Lmm101DtoKsjk;
+import org.cloud.dto.Lmm102DtoTo;
+import org.cloud.model.Lmmmgrl;
+import org.cloud.model.Lmmmorg;
+import org.cloud.service.Lmm102Service;
+import org.cloud.webapp.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.util.MessageSource;
+
+/*******************************************************************************
+ * [処理概要] 
+ * 
+ * 組織メンテナンスモジュール、新規機能と更新機能の処理を行う
+ * 
+ * @author ソフトウェア事業本部
+ * @version 01.00 2017/10/12 新規作成 
+ ******************************************************************************/
+@Controller
+@RequestMapping("/lmm102Controller")
+public class Lmm102Controller extends BaseController{
+    
+    // lmm102Serviceの注入
+    @Autowired
+    private Lmm102Service lmm102Service;
+
+    /**
+     * init 組織メンテナンス画面の初期化処理
+     * LVB-009001システム異常処理がCloudExceptionで行う
+     * @param modeGam_Hdn
+     * @param orgcod
+     * @param appstaymdhms
+     * @param tntcod
+     * @param lmm101DtoKsjk 一覧検索条件の保持
+     * @return  
+     */
+    @RequestMapping(value="/init", method={RequestMethod.POST, RequestMethod.GET})
+    public ModelAndView init(String modeGam_Hdn, String orgcod, String appstaymdhms, String tntcod, @ModelAttribute Lmm101DtoKsjk lmm101DtoKsjk) {
+        
+    	//ModelAndViewの定義
+    	ModelAndView modelAndView = new ModelAndView();
+    	Lmm102DtoTo lmm102Dto = null ;
+    	//テスト値（納品時、削除必要）
+    	tntcod = "01001006";
+    	
+        // オーダー作成可否区分リストの作成 
+    	List<Lmmmgrl> list1 = lmm102Service.selectFind(tntcod,Constants.GENERAL_Flg2);
+        // 組織識別利用区分リストの作成
+        List<Lmmmgrl> list2 = lmm102Service.selectFind(tntcod,Constants.GENERAL_Flg1);
+        
+        // 画面遷移パターンが「0(新規登録パターン)」
+        if ("0".equals(modeGam_Hdn)) {
+            //全ての項目を空白で表示する
+            lmm102Dto = new Lmm102DtoTo();
+        // 画面遷移パターンが「1(更新パターン)」
+        } else if ("1".equals(modeGam_Hdn)) {
+            
+        	// 一覧画面で選択されたレコード情報を該当画面に表示する
+        	Lmmmorg lmmorg = lmm102Service.updateSelect(orgcod, appstaymdhms, tntcod);
+            lmm102Dto =new Lmm102DtoTo();
+			
+            if(lmmorg != null){
+            	// テナントコード
+            	lmm102Dto.setTntcod(lmmorg.getTntcod());
+    			if(null != lmmorg.getUpdymdhms()){
+    				lmm102Dto.setUpdateYmdhm_Lbl(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(lmmorg.getUpdymdhms()));
+    			}
+    			// 適用開始日時・年月日
+    			lmm102Dto.setAppStaYmd_Txt(new SimpleDateFormat("yyyy-MM-dd").format(lmmorg.getAppstaymdhms()));
+    			// 適用開始日時・時	
+    			lmm102Dto.setAppStaHh_Txt(new SimpleDateFormat("HH").format(lmmorg.getAppstaymdhms()));
+    			// 適用開始日時・分	
+    			lmm102Dto.setAppStaMm_Txt(new SimpleDateFormat("mm").format(lmmorg.getAppstaymdhms()));
+    			// 適用終了日時・時	
+    			lmm102Dto.setAppEndHh_Txt(new SimpleDateFormat("HH").format(lmmorg.getAppendymdhms()));
+    			// 適用終了日時・分
+    			lmm102Dto.setAppEndMm_Txt(new SimpleDateFormat("mm").format(lmmorg.getAppendymdhms()));
+    			// 適用終了日時・年月日
+    			lmm102Dto.setAppEndYmd_Txt(new SimpleDateFormat("yyyy-MM-dd").format(lmmorg.getAppendymdhms()));
+    			// 廃止フラグ 
+    			lmm102Dto.setAboFlg_Chk(lmmorg.getAboflg());
+    			// 組織名１
+    			lmm102Dto.setOrgNam1_Txt(lmmorg.getOrgnam1());
+    			// 組織名２
+    			lmm102Dto.setOrgNam2_Txt(lmmorg.getOrgnam2());
+    			// 組織名３
+    			lmm102Dto.setOrgNam3_Txt(lmmorg.getOrgnam3());
+    			// 組織名４
+    			lmm102Dto.setOrgNam4_Txt(lmmorg.getOrgnam4());
+    			// 組織名５
+    			lmm102Dto.setOrgNam5_Txt(lmmorg.getOrgnam5());
+    			//組織コード	
+    			lmm102Dto.setOrgCode_Txt(lmmorg.getOrgcod());
+    			// 申請組織コード
+    			lmm102Dto.setAppOrgCod_Txt(lmmorg.getApporgcod());
+    			// オーダー作成可否区分
+    			lmm102Dto.setOrgKbn01_Sct(lmmorg.getOrgkbn01());
+    			// 組織識別区分
+    			lmm102Dto.setOrgKbn02_Sct(lmmorg.getOrgkbn02());
+    			//更新回数
+    			if (lmmorg.getUpdeac()!=null){
+    				lmm102Dto.setUpdEac_Hdn(String.valueOf(lmmorg.getUpdeac()));
+    			}
+            //検索対象が存在しない場合
+            }else{
+            	//該当するデータが見つかりませんでした。
+            	this.saveMessage(MessageSource.getText(request, "LVB-005004"));
+            }
+        }
+        
+        // オーダー作成可否区分リストの作成 
+        modelAndView.addObject("list1", list1);
+        // 組織識別利用区分リストの作成
+        modelAndView.addObject("list2", list2);
+        //画面モードを画面に隠れる
+        modelAndView.addObject("modeGam_Hdn", modeGam_Hdn);
+        //lmm102Dtoを画面に表示する
+        modelAndView.addObject("lmm102Dto", lmm102Dto);
+        
+        //一覧画面の検索条件の保持
+        modelAndView.addObject("lmm101DtoKsjk", lmm101DtoKsjk);
+        
+        //lmm102画面に遷移する
+        modelAndView.setViewName("/lmm102/lmm102");
+        return modelAndView;
+    }
+        
+    /**
+     * 組織マスタの新規処理
+     * LVB-009001システム異常処理がCloudExceptionで行う
+     * @param lmm102Dto
+     * @param request
+     * @return
+     * @throws ParseException 
+     */
+    @RequestMapping(value="/add", method={RequestMethod.POST})
+    public ModelAndView add(@ModelAttribute Lmm102DtoTo lmm102Dto, HttpServletRequest request) throws ParseException {
+        
+    	//ModelAndViewの定義
+    	ModelAndView modelAndView = new ModelAndView();
+    	HttpSession session = request.getSession();
+    	String tntcod = (String)session.getAttribute("tntcod");
+    	//テスト値（納品時、削除必要）
+    	tntcod = "01001006";
+    	//更新用のbeanの作成
+    	Lmmmorg lmmmorg = new Lmmmorg();
+    	
+        // テナントコード
+        lmmmorg.setTntcod(tntcod);
+        // 組織コード
+        lmmmorg.setOrgcod(lmm102Dto.getOrgCode_Txt());
+        // 廃止フラグ
+        if(lmm102Dto.getAboFlg_Chk()== null){
+            lmmmorg.setAboflg("0");
+        } else {
+            lmmmorg.setAboflg("1");
+        }
+        // 組織名１
+        lmmmorg.setOrgnam1(lmm102Dto.getOrgNam1_Txt());
+        // 組織名２
+        lmmmorg.setOrgnam2(lmm102Dto.getOrgNam2_Txt());
+        // 組織名３
+        lmmmorg.setOrgnam3(lmm102Dto.getOrgNam3_Txt());
+        // 組織名４
+        lmmmorg.setOrgnam4(lmm102Dto.getOrgNam4_Txt());
+        // 組織名５
+        lmmmorg.setOrgnam5(lmm102Dto.getOrgNam5_Txt());
+        // オーダー作成可否区分
+        lmmmorg.setOrgkbn01(lmm102Dto.getOrgKbn01_Sct());
+        // 組織識別区分
+        lmmmorg.setOrgkbn02(lmm102Dto.getOrgKbn02_Sct());
+        // 申請組織コード
+        lmmmorg.setApporgcod(lmm102Dto.getAppOrgCod_Txt());
+        // 適用開始日時
+        lmmmorg.setAppstaymdhms(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(lmm102Dto.getAppStaYmd_Txt()+" "+lmm102Dto.getAppStaHh_Txt()+":"+lmm102Dto.getAppStaMm_Txt()));
+        // 適用終了日時
+        lmmmorg.setAppendymdhms(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(lmm102Dto.getAppEndYmd_Txt()+" "+lmm102Dto.getAppEndHh_Txt()+":"+lmm102Dto.getAppEndMm_Txt()));
+        // 登録年月日時分秒
+        lmmmorg.setInsymdhms(new Date());
+        // 登録者
+        lmmmorg.setInsnam("523li");
+        // 登録者区分
+        lmmmorg.setInskbn("555");
+        // 登録方法区分
+        lmmmorg.setInsmethodkbn("5235");
+        // 更新回数
+        lmmmorg.setUpdeac(0l);
+        // 更新年月日時分秒
+        lmmmorg.setUpdymdhms(new Date());
+        // 更新者
+        lmmmorg.setUpdnam("512wei");
+        // 更新者区分
+        lmmmorg.setUpdkbn("512");
+        // 更新方法区分
+        lmmmorg.setUpdmethodkbn("5124");
+        
+        // 新規処理を行う
+        int resultIns = lmm102Service.insert(lmmmorg);
+        // 成功追加の標識 の判断
+        if(resultIns == 1){
+        	//新規が成功の場合、メッセージの処理
+       	    this.saveMessage(MessageSource.getText(request, "LVB-000004", null));
+       	    //新規の初期状態に戻る
+            modelAndView.setViewName("redirect:/lmm102Controller/init?modeGam_Hdn=0");
+        }
+        return modelAndView;
+    }
+        
+    /**
+     * 組織マスタの更新処理
+     *  LVB-009001システム異常処理がCloudExceptionで行う
+     * @param lmm102Dto
+     * @param request
+     * @param ra 一覧検索条件保持の用引数
+     * @return
+     * @throws ParseException 
+     */
+    @RequestMapping(value="/update", method = RequestMethod.POST)
+    public ModelAndView update(@ModelAttribute Lmm102DtoTo lmm102Dto, HttpServletRequest request ,RedirectAttributes ra) throws ParseException {
+    	
+    	//ModelAndViewの定義
+    	ModelAndView modelAndView = new ModelAndView();
+    	HttpSession session = request.getSession();
+    	String tntcod = (String)session.getAttribute("tntcod");
+    	//テスト値（納品時、削除必要）
+    	tntcod = "01001006";
+    	//更新用のbeanの作成
+    	Lmmmorg lmmmorg = new Lmmmorg();
+    	
+        lmmmorg.setTntcod(tntcod);
+        lmmmorg.setOrgcod(lmm102Dto.getOrgCode_Txt());
+        if(lmm102Dto.getAboFlg_Chk()== null){
+        	lmmmorg.setAboflg("0");
+        } else {
+        	lmmmorg.setAboflg("1");
+        } 
+        lmmmorg.setOrgnam1(lmm102Dto.getOrgNam1_Txt());
+        lmmmorg.setOrgnam2(lmm102Dto.getOrgNam2_Txt());
+        lmmmorg.setOrgnam3(lmm102Dto.getOrgNam3_Txt());
+        lmmmorg.setOrgnam4(lmm102Dto.getOrgNam4_Txt());
+        lmmmorg.setOrgnam5(lmm102Dto.getOrgNam5_Txt());
+        lmmmorg.setOrgkbn01(lmm102Dto.getOrgKbn01_Sct());
+        lmmmorg.setOrgkbn02(lmm102Dto.getOrgKbn02_Sct());
+        lmmmorg.setApporgcod(lmm102Dto.getAppOrgCod_Txt());
+        lmmmorg.setAppstaymdhms(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(lmm102Dto.getAppStaYmd_Txt()+" "+lmm102Dto.getAppStaHh_Txt()+":"+lmm102Dto.getAppStaMm_Txt()));
+        lmmmorg.setAppendymdhms(new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(lmm102Dto.getAppEndYmd_Txt()+" "+lmm102Dto.getAppEndHh_Txt()+":"+lmm102Dto.getAppEndMm_Txt()));
+        if((lmm102Dto.getUpdEac_Hdn()!=null) && (!("".equals(lmm102Dto.getUpdEac_Hdn())))){
+        	Long updeacafter = new Long(lmm102Dto.getUpdEac_Hdn())+1;
+        	lmmmorg.setUpdeacafter(updeacafter);
+        	lmmmorg.setUpdeac(new Long(lmm102Dto.getUpdEac_Hdn())); 	
+        } 
+        lmmmorg.setUpdnam("512wei");
+        lmmmorg.setUpdkbn("512");
+        lmmmorg.setUpdmethodkbn("5124"); 
+       
+       //更新処理を行う
+       int resultUpd = lmm102Service.upDate(lmmmorg);
+       
+       //他のユーザーに更新されるの場合
+       if (resultUpd == 0){
+    	    //　他のユーザーに更新されました．内容確認のうえ再度処理してください
+          	this.saveMessage(MessageSource.getText(request, "LVB-005010"));
+          	modelAndView.addObject("lmm102Dto", lmm102Dto);
+            //該当画面に戻る
+            modelAndView.setViewName("/lmm102/lmm102");
+       //更新成功の場合
+       }else{
+    	   this.saveMessage(MessageSource.getText(request, "LVB-000004"));
+    	   //一覧検索条件の保持
+       	   ra.addFlashAttribute("searchZone_Rdo" , lmm102Dto.getSearchZone_RdoKsjk());
+       	   ra.addFlashAttribute("orgCode_Txt" , lmm102Dto.getOrgCode_TxtKsjk());
+       	   ra.addFlashAttribute("appOrgcod_Txt" , lmm102Dto.getAppOrgcod_TxtKsjk());
+       	   ra.addFlashAttribute("orgKbn2_Sct" , lmm102Dto.getOrgKbn2_SctKsjk());
+       	   ra.addFlashAttribute("orgNam1_Tx" , lmm102Dto.getOrgNam1_TxtKsjk());
+       	   //一覧画面に戻るし、該当画面に遷移するとき、その条件で検索するし、検索結果を再表示する
+       	   modelAndView.setViewName("redirect:/lmm101Controller/quallBy");
+       }  
+      return modelAndView;
+    }
+    
+    
+    /**
+     * 組織コード二重登録チェック
+     * @param orgCode
+     * @return
+     * @throws UnsupportedEncodingException 
+     * produces="text/html; charset=UTF-8" 根解决乱码问题
+     */
+    @RequestMapping(value="/checkOrg",produces="text/html; charset=UTF-8")
+    @ResponseBody
+    public String checkOrgCode(String orgCode){
+    	
+    	HttpSession session = request.getSession();
+    	String tntcod = (String)session.getAttribute("tntcod");
+    	//テスト値（納品時、削除必要）
+    	tntcod = "01001006";
+    	int checkRs = lmm102Service.checkOrgCode(orgCode,tntcod);
+    	String msg = ""; 
+    	if(checkRs >0){
+    		msg = "組織コード既に存在しています";
+    	}else{
+    		msg= "組織コードが可用です";
+    	}
+    	
+    	
+    	return msg;
+    }
+}

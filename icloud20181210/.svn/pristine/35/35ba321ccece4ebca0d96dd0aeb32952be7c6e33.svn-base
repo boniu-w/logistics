@@ -1,0 +1,193 @@
+body {
+font-family: Arial, Helvetica, Verdana, Sans-serif;
+font-size: 12px;
+line-height:20px;
+color: #333333;
+background: #ffffff;
+margin:0px; padding:0px;
+}
+
+a:link {
+	font-size: 12px;
+	color: #ffffff;
+	text-decoration: none;
+}
+a:HOVER{
+	color: #ffffff;
+	text-decoration: underline;
+	}
+a:visited {
+	color: #ffffff;
+	text-decoration: none;
+}
+
+
+.tt a:link {
+	font-size: 12px;
+	color: #333333;
+	text-decoration: none;
+}
+.tt a:HOVER{
+	color: #333333;
+	text-decoration: underline;
+	}
+.tt a:visited {
+	color: #333333;
+	text-decoration: none;
+}
+
+
+
+.hoverli2{
+ background:url(../images/red_hoverbg-top.jpg) repeat-x; width:107px; float:left;}
+
+.hoverli3{
+ background:url(../images/red_hoverbg-top.jpg) repeat-x; width:90x; float:left;}
+
+.hoverli4{
+ background:url(../images/red_hoverbg-top.jpg) repeat-x; width:90px; float:left;}
+
+.hoverli5{
+ background:url(../images/red_hoverbg-top.jpg) repeat-x; width:107px; float:left;}
+
+
+
+div.mainmenu a.t1,div.mainmenu a.t1:visited{ width:80px;line-height:30px; height:30px; display:block; float:left; text-align:center;background: url(../images/red_dome_13.jpg) 75px 0px no-repeat; }
+div.mainmenu a.t1:hover{ background: url(../images/red_dome_13.jpg) 75px 0px no-repeat;}
+
+div.mainmenu a.t2,div.mainmenu a.t2:visited{ width:107px;line-height:30px; height:30px; display:block; float:left; text-align:center;background: url(../images/red_dome_13.jpg) 105px 0px no-repeat; }
+div.mainmenu a.t2:hover{ background: url(../images/red_dome_13.jpg) 105px 0px no-repeat ;}
+
+div.mainmenu a.t3,div.mainmenu a.t3:visited{ width:90px; line-height:30px;height:30px; display:block; float:left; text-align:center;background: url(../images/red_dome_13.jpg) no-repeat 88px 0px ; }
+div.mainmenu a.t3:hover{ background: url(../images/red_dome_13.jpg) no-repeat 88px 0px ;}
+
+div.mainmenu a.t4,div.mainmenu a.t4:visited{ width:90px;line-height:30px; height:30px; display:block; float:left; text-align:center;background: url(../images/red_dome_13.jpg) no-repeat 88px 0px ; }
+div.mainmenu a.t4:hover{ background: url(../images/red_dome_13.jpg) no-repeat 88px 0px ;}
+
+div.mainmenu a.t5,div.mainmenu a.t5:visited{ width:107px; line-height:30px;height:30px; display:block; float:left; text-align:center;background: url(../images/red_dome_13.jpg) no-repeat 105px 0px ; }
+div.mainmenu a.t5:hover{ background: url(../images/red_dome_13.jpg) no-repeat 105px 0px ;}
+
+
+
+.mtDropdownMenu {	LEFT: -1000px; OVERFLOW: hidden; POSITION: absolute; TOP: -1000px}
+.mtDropdownMenu .content {	POSITION: absolute}
+.mtDropdownMenu .items {	BORDER-RIGHT: #999 0px solid; BORDER-TOP: #999 0px solid; Z-INDEX: 2; LEFT: 0px; BORDER-LEFT: #999 0px solid; BORDER-BOTTOM: #999 0px solid; POSITION: relative; TOP: 0px; BORDER: #ffffff 1px solid;}
+.mtDropdownMenu .item {	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT-SIZE: 9pt; BORDER-BOTTOM-WIDTH: medium; BORDER-LEFT: medium none; CURSOR: hand; COLOR: #000000; FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; TEXT-DECORATION: none; EXT-DECORATION: none}
+.mtDropdownMenu .background {	Z-INDEX: 1; FILTER: alpha(opacity=80); LEFT: 0px; POSITION: absolute; TOP: 0px; moz-opacity: .8}
+.mtDropdownMenu .shadowRight {	Z-INDEX: 3; FILTER: alpha(opacity=30); WIDTH: 0px; POSITION: absolute; TOP: 0px; moz-opacity: .4}
+.mtDropdownMenu .shadowBottom {	Z-INDEX: 1; FILTER: alpha(opacity=30); LEFT: 0px; POSITION: absolute; HEIGHT: 0px; moz-opacity: .4}
+.mtDropdownMenu .hover {	BACKGROUND: #770101; COLOR: #000000}/*下拉菜单hover色  #EA002B*/
+.mtDropdownMenu .item IMG {	MARGIN-LEFT: 10px}
+
+
+
+
+
+
+#nav{
+ background:url(../images/red_bg_nav.jpg) repeat-x;
+ height:27px;
+ line-height:27px;
+ padding:0 12px 0 18px; }
+
+#nav_left{
+ background:url(../images/red_ico-nav.jpg) center left no-repeat;
+ float:left;
+ padding:0 0 0 20px;
+ color:#fff; 
+ width:200px;}
+#nav_middle{
+ float:left;
+ text-align:right;
+ padding:0 35px 0 0;
+ width:590px;
+ color:#fff;}
+#nav_right{
+ float:left;
+ padding:0 0px 0 0;
+ width:110px;
+ text-align:right;
+ color:#fff;}
+#nav_right a{
+ color:#fff;}
+
+
+.STYLE2 {
+	font-size: 14px;
+	font-weight: bold;
+	line-height:27px;
+	color:#9b0b0a;
+	background-color:#cdb297
+}
+
+
+.tdbg
+{ border-top:1px solid #9fb6e6; border-left:1px solid #9fb6e6; background-color:#f8f7f5
+}
+.tdbg td{ border-bottom:1px solid #9fb6e6; border-right:1px solid #9fb6e6; padding:2px; padding-left:5px; }
+.tdbg1 {border-top:1px solid #9fb6e6; border-left:1px solid #9fb6e6;
+}
+
+.tdbg .yy { background-color:#f8eee4;}
+
+
+
+.c-unselect{
+background:url(../images/input_bg.jpg) repeat-x;
+}
+
+
+#footer{
+ clear:both;
+ margin-top:12px;
+ background:#900301;
+ color:#fff;
+ padding:8px 0;
+ text-align:center;}
+
+
+.c-table-btn{
+ width:auto !important;
+ background:#d76865 url(../images/red_btn.jpg);
+ border:1px solid #a31916;
+ font-size:12px;
+ color:#fff;
+ cursor:pointer;
+ line-height:16px;
+ }
+
+
+.headcorp{ width:788px; background:url(../images/headcorp.jpg) #08107b no-repeat; height:102px;}
+
+.main{ width:747px; padding-left:41px; padding-top:25px; background:url(../images/main-bg.gif) no-repeat right bottom; height:277px;}
+.main .left{ width:400px; float:left; overflow:hidden; }
+.main .right { width:347px; float:left; overflow:hidden;display:inherit}
+.main .left .title{ width:400px; float:left; overflow:hidden;}
+
+.main .left .title .nn{ background:url(../images/allbg.png) no-repeat -588px -27px; height:22px; width:85px; padding-top:5px; text-align:center; font-weight:bold; margin-left:4px;}
+
+.main .left .content{ background:url(../images/allbg.png) no-repeat -0px -161px; width:379px; height:160px;}
+
+.main .left .beizhu{ width:379px; overflow:hidden; float:left; margin-top:10px; padding-left:10px; color:#f96e1d; }
+
+
+.main .right .xx UL {
+	PADDING-LEFT: 5px; FONT-SIZE: 14px; FLOAT: left; PADDING-BOTTOM: 5px; OVERFLOW: hidden; WIDTH: 310px; COLOR: #333; PADDING-TOP: 9px
+}
+.main .right .xx LI {
+	FONT-SIZE: 14px; FLOAT: left; WIDTH: 310px; LINE-HEIGHT: 24px
+}
+
+.foot{ width:788px; height:52px; padding-top:18px; background:url(../images/foot_bg.gif) repeat-x; margin-top:5px; text-align:center; line-height:27px;}
+.foot p{ text-align:center; width:700px; line-height:27px;}
+.center{ margin-left:auto; margin-right:auto;}
+
+
+.gg UL {
+	PADDING-LEFT: 100px; FONT-SIZE: 12px; FLOAT: left; PADDING-BOTTOM: 5px; OVERFLOW: hidden; WIDTH: 700px; COLOR: #333; PADDING-TOP: 5px
+}
+.gg LI {
+	FONT-SIZE: 12px; FLOAT: left; WIDTH: 700px; LINE-HEIGHT: 27px}
+	
+	
+#artibody{padding:10px; line-height:27px; font-size:14px;}	

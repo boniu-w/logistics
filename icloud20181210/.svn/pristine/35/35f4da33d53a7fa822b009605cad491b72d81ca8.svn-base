@@ -1,0 +1,83 @@
+package org.cloud.webapp.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import java.util.Set;
+
+import org.Constants;
+import org.cloud.model.Lmmmgrl;
+import org.cloud.service.Lmm101Service;
+import org.cloud.service.impl.Lmm117ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+/**
+*@author WG
+*@date 2019年5月22日 下午8:46:51
+*/
+@Controller
+@RequestMapping(value="/lmm117Controller")
+public class Lmm117Controller {
+	@Autowired
+	Lmm117ServiceImpl lmm117ServiceImpl;
+	@Autowired
+    private Lmm101Service lmm101Service;
+
+	/**
+     * 組織一覧画面の初期化処理
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/initPage", method = {RequestMethod.POST, RequestMethod.GET })
+    public ModelAndView initPage(HttpServletRequest request) {
+    	//ModelAndViewの定義
+    	ModelAndView modelAndView = new ModelAndView();
+    	HttpSession session = request.getSession();
+    	String tntcod = (String)session.getAttribute("tntcod");
+    	//テスト値（納品時、削除必要）
+    	tntcod = "01001006";
+    	
+        //メーニュから場合
+    	// DashBoardから遷移した場合、全項目をブランク表示にする。
+        //検索範囲の初期値を２に設定する
+    	String searchZone_Rdo = "2";
+    	//メンテナンス画面から遷移した場合、
+        //quallBy()事件で、元検索条件の保持を行う
+
+    	// 組織識別区分のリスト表示処理
+    	List<Lmmmgrl> listOrgKbn2_Sct = lmm101Service.findOrgKbn2_Sct(tntcod,Constants.GENERAL_Flg1);
+        modelAndView.addObject("listOrgKbn2_Sct", listOrgKbn2_Sct);
+        
+       // 初期表示データ検索範囲 の設定 
+        modelAndView.addObject("searchZone_Rdo", searchZone_Rdo);
+        
+        // ページ遷移
+        modelAndView.setViewName("/lmm117/lmm117");
+        return modelAndView;
+    }
+	
+	@RequestMapping(value="/findSome")
+	public void findSome(@RequestParam HashMap<String,Object> hashMap) {
+		Set<Entry<String, Object>> entrySet = hashMap.entrySet();
+		Object string = hashMap.get("");
+		
+		List findSome = lmm117ServiceImpl.findSome(hashMap);
+		
+	}
+	
+	@RequestMapping(value="/findAll")
+	public void findAll() {
+		List<HashMap<String, Object>> findAll = lmm117ServiceImpl.findAll();
+		System.out.println(findAll);
+	}
+	
+}

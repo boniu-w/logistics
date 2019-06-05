@@ -1,0 +1,44 @@
+package org.cloud.webapp.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import org.cloud.service.impl.Lmm117ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+/**
+*@author WG
+*@date 2019年5月22日 下午8:46:51
+*/
+@Controller
+@RequestMapping(value="/lmm117Controller")
+public class Lmm117Controller {
+	@Autowired
+	Lmm117ServiceImpl lmm117ServiceImpl;
+
+	@RequestMapping(value="/initPage")
+	public void initPage() {
+		
+	}
+	
+	@RequestMapping(value="/findSome")
+	public void findSome(@RequestParam HashMap<String,String> hashMap) {
+		Set<Entry<String, String>> entrySet = hashMap.entrySet();
+		hashMap.get("");
+		
+		List findSome = lmm117ServiceImpl.findSome();
+		
+	}
+	
+	@RequestMapping(value="/findAll")
+	public void findAll() {
+		List<HashMap<String, Object>> findAll = lmm117ServiceImpl.findAll();
+		System.out.println(findAll);
+	}
+	
+}

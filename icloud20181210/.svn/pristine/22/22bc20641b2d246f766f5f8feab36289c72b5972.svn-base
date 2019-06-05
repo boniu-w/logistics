@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.cloud.mapper.Lmm101Mapper">
+
+    <select id="findOrgKbn2_Sct" resultType="Lmmmgrl" parameterType="String">
+        select gnrprpcod,
+               gnrprpnam1
+          from Lmmmgrl
+         where tntcod= #{lgustntcod}
+           and gnrprpkbn = #{generalFlg}
+    </select>
+    <select id="quallBy101" resultType="Hashmap" parameterType="String">
+        select t.tntcod,
+               t.orgcod,
+               t.aboflg,
+               to_char(t.appstaymdhms,'yyyy-MM-dd') as appstaymdhms,
+               to_char(t.appendymdhms,'yyyy-MM-dd') as appendymdhms,
+               t.orgnam1,
+               t.orgnam2,
+               t.orgnam3,
+               t.orgnam4,
+               t.orgnam5,
+               t.orgkbn01,
+               t.orgkbn02,
+               t.apporgcod
+        from Lmmmorg t
+        <where>
+            t.tntcod = '01001006'
+            <if test="searchZone_Rdo == 2">
+                and t.appstaymdhms &lt;= sysdate and t.appendymdhms &gt;=sysdate
+            </if>
+            <if test="appOrgcod_Txt != null and appOrgcod_Txt !=''">
+                and t.apporgcod like '%${appOrgcod_Txt}%'
+            </if>
+            <if test="orgCode_Txt != null and orgCode_Txt !=''">
+                and t.orgcod like '%${orgCode_Txt}%'
+            </if>
+            <if test="orgNam1_Txt != null and orgNam1_Txt !=''">
+                and t.orgnam1 like '%${orgNam1_Txt}%'
+            </if>
+            <if test="orgKbn2_Sct != null and orgKbn2_Sct !=''">
+                and t.orgkbn02 = #{orgKbn2_Sct}
+            </if>
+        </where>
+        order by t.apporgcod desc,t.orgcod desc,appstaymdhms desc
+    </select>
+
+</mapper>

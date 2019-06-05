@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>発着別トラッキングGマスタメンテナンス画面</title>
+<link rel="stylesheet" type="text/css" href="./css/common.css">
+<link rel="stylesheet" type="text/css" href="./css/SLMM118.css">
+<script src="./js/windowcontrol.js"></script>  
+</head>
+<body>
+<form action="">
+<table  class="body">
+    <tr>
+    <td colspan="2">
+        <table  class="header_area">
+            <tr>
+                <td>
+                    <jsp:include page="header.jsp" flush="true"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="menu">
+                <tr >
+                    <td class="menu">
+                        <jsp:include page="menu.jsp" flush="true"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="main">
+                <tr>
+                    <td class="main">
+
+
+
+<table class="body">
+	<tr>
+		<td>
+		<table >
+			<tr>
+				<td class="label_normal" width="100">
+					&nbsp;
+				</td>
+				<td class="label_normal" width="200" >
+					<u><nobr>前回更新ユーザ&nbsp;L[前回更新ユーザ]</nobr></u>
+				</td>
+				<td class="label_normal" width="180">
+					&nbsp;
+				</td>
+				<td class="label_normal" width="200">
+					<u><nobr>前回更新日時:L[前回更新日時]</nobr></u>
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<table class="condition">
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>出荷場所</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="shipmentPlaceCode_Txt" maxlength="25" size="15" value="L[出荷場所]"/>
+					<input type="submit" value= "検索" id="shipmentPlaceSearch_Btn" class="button_normal" />
+					<input type="text" id="shipmentPlaceName_Lbl" maxlength="256" size="40" value="L[出荷場所名]"/> 
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>最終届先場所</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="finalDestinationCode_Txt" maxlength="25" size="15" value="L[最終届先場所]"/>
+					<input type="submit" value= "検索" id="lastDestinationSearch_Btn" class="button_normal" />
+					<input type="text" id="finalDestinationName_Txt" maxlength="256" size="40" value="L[最終届先場所名]"/> 
+				</td>
+			</tr>
+
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>主輸送モード</nobr></td>
+				<td class="label_left" >
+					<select id="shipmentPlace_Sct" size="1" >
+						<option value="1">R[主輸送モード]</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>トラッキングＧ</nobr></td>
+				<td class="label_left" >
+					<select id="trackingG_Sct" size="1" >
+						<option value="1">R[トラッキングＧ]</option>
+					</select>
+				</td>
+			</tr>
+
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>申請組織</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="appOrgCode_Txt" maxlength="12" size="15" value="L[申請組織]"/>
+					<input type="submit" value= "検索" id="appSearch_Btn" class="button_normal" />
+					<input type="text" id="appOrgName_Lbl" maxlength="35" size="40" value="L[申請組織名]"/> 
+				</td>
+			</tr>
+
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>廃止フラグ</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="checkbox" id="aboFlg_Chk" name="q1" value="1">　廃止する場合にチェック
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+</table>
+
+<table class="common_area">
+	<tr>
+		<td align="left">
+			<input type="submit" value= "戻る" id="back_Btn" class="button_normal" /> 
+		</td>
+		<td align="right">
+			<input type="submit" value= "クリア" id="clear_Btn" class="button_normal" /> 
+			<input type="submit" value= "更新" id="update_Btn" class="button_normal" />
+		</td>
+
+	</tr>
+</table>
+
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</form>
+</body>
+</html>

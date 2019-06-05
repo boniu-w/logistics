@@ -1,0 +1,12 @@
+$(document).ready(function(){      
+             
+	$.validator.setDefaults({       
+	    submitHandler: function(form) {    
+	        form.submit();    
+	    }       
+	});      
+	jQuery.validator.addMethod("stringCheck", function(value, element) {       
+	    return this.optional(element) || /^[\u0391-\uFFE5\w]+$/.test(value);       
+	},
+	"{0}plese zhongwen yingwen shuzi {1}");
+});

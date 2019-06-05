@@ -1,0 +1,20 @@
+package org.cloud.mapper;
+
+import java.util.HashMap;
+import java.util.List;
+
+import org.cloud.dto.Lmm117ResultType;
+import org.springframework.stereotype.Repository;
+
+/**
+*@author WG
+*@date 2019年5月23日 上午11:38:55
+*/
+@Repository
+public interface Lmm117Mapper {
+	
+//	public List<HashMap<Object, Object>> findSomeField(HashMap<String, Object> hashMap) ;
+	public List<Lmm117ResultType> findSomeField(HashMap<String, Object> hashMap) ;
+	public List<HashMap<String, Object>> findAll() ;
+	
+}

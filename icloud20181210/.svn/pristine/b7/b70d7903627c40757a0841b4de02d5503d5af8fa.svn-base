@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm117Mapper">
+	
+    <select id="findSome" resultType="">
+    	 select * from LMMMTRKARVDPT pt left join LMMMORG rg
+          on pt.tntcod=rg.tntcod
+          and rg.appstaymdhms &lt;=sysdate
+          and sysdate &lt;=rg.appendymdhms
+          and rg.aboflg=0
+          left join lmmmplc plc 
+      on  plc.plccod=pt.sipplccod 
+      and plc.tntcod=pt.tntcod
+      and plc.plccod=pt.fnlplccod
+      and plc.aboflg=0 
+      left join lmmmtrkg trkg 
+  on  trkg.tntcod=pt.tntcod
+  and trkg.trkgrpcod=pt.trkgrpcod 
+  and trkg.aboflg=0 
+  left join lmmmgrl grl 
+  on grl.gnrprpkbn='5002' 
+and grl.gnrprpcod=pt.mtrsmdkbn
+    	<where>
+    		<!-- 申請組織コード -->
+	    	<if test="username!=null">
+	    		apporgcod=${}
+	    	</if>
+	    	<!-- 出荷場所コード -->
+	    	<if test="">
+	    		sipplccod=${}
+	    	</if>
+	    	<!-- 主輸送モード区分 -->
+	    	<if test="">
+	    		mtrsmdkbn =${}
+	    	</if>
+	    	<!-- トラッキンググループコード -->
+	    	<if test="">
+	    		trkgrpcod =${}
+	    	</if>
+	    	<!-- 出荷場所名 -->
+	    	<if test="">
+	    		LMMMPLC.plcnam  =${}
+	    	</if>
+	    	<!-- 最終届先場所名 -->
+	    	<if test="">
+	    		LMMMPLC.plcnam  =${}
+	    	</if>
+	    	<!-- トラッキンググループコード 名称 -->
+	    	<if test="">
+	    		 =${}
+	    	</if>
+	    	<!-- 検索範囲: 廃止フラグ＝オフ	 -->
+	    	<if test="">
+	    		 =${}
+	    	</if>
+    	</where> 
+    </select>
+    
+   
+    
+      
+    
+</mapper>

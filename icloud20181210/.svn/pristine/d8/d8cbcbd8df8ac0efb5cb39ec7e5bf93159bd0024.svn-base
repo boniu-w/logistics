@@ -1,0 +1,16 @@
+package org.cloud.mapper;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+/**
+*@author WG
+*@date 2019年5月23日 上午11:38:55
+*/
+@Repository
+public interface Lmm117Mapper {
+	
+	public List findSome() ;
+
+}

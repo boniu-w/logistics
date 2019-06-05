@@ -1,0 +1,30 @@
+package org.cloud.webapp.controller;
+
+import java.util.List;
+
+import org.cloud.service.impl.Lmm117ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+/**
+*@author WG
+*@date 2019年5月22日 下午8:46:51
+*/
+@Controller
+@RequestMapping(value="/lmm117Controller")
+public class Lmm117Controller {
+	@Autowired
+	Lmm117ServiceImpl lmm117ServiceImpl;
+
+	@RequestMapping(value="/initPage")
+	public void initPage() {
+		
+	}
+	
+	@RequestMapping(value="/findSome")
+	public void findSome() {
+		List findSome = lmm117ServiceImpl.findSome();
+		
+	}
+}

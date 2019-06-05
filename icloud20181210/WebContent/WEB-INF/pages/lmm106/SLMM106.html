@@ -1,0 +1,204 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>イベントメンテナンス画面</title>
+<link rel="stylesheet" type="text/css" href="./css/common.css">
+<link rel="stylesheet" type="text/css" href="./css/SLMM106.css">
+<script src="./js/windowcontrol.js"></script>  
+</head>
+<body>
+<form action="">
+<table  class="body">
+    <tr>
+    <td colspan="2">
+        <table  class="header_area">
+            <tr>
+                <td>
+                    <jsp:include page="header.jsp" flush="true"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="menu">
+                <tr >
+                    <td class="menu">
+                        <jsp:include page="menu.jsp" flush="true"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="main">
+                <tr>
+                    <td class="main">
+
+
+
+
+<table class="body">
+	<tr>
+		<td>
+		<table >
+			<tr>
+				<td class="label_normal" width="100">
+					&nbsp;
+				</td>
+				<td class="label_normal" width="200" >
+					<u><nobr>前回更新ユーザ&nbsp;L[前回更新ユーザID]</nobr></u>
+				</td>
+				<td class="label_normal" width="180">
+					&nbsp;
+				</td>
+				<td class="label_normal" width="200">
+					<u><nobr>前回更新日時:L[前回更新日時]</nobr></u>
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+		<table class="condition">
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>イベントコード</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="ivtCod_Are" maxlength="12" size="74" value="L[イベントコード]"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>イベント名称</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="ivtNam_Are" maxlength="100" size="74" value="L[イベント名称]"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>アラート区分</nobr></td>
+				<td class="label_left" >
+					<select id="ivtKbn2_Sct">
+						<option>L[アラート区分]</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>イベント種別区分</nobr></td>
+				<td class="label_left" >
+					<select id="ivtKbn1_Sct">
+						<option>L[イベント種別区分]</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>アクションメモ</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="atnFil_Ate" maxlength="100" size="74" value="L[アクションメモ]"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>申請組織</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="text" id="appCod_Are" maxlength="12" size="15" value="L[申請組織コード]"/>
+					<input type="submit" value= "検索" id="appSearch_Btn" class="button_normal" />
+					<input type="text" id="appNam_Are" maxlength="35" size="40" value="L[申請組織名]"/> 
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color" width="200" >
+					<nobr>廃止フラグ</nobr>
+				</td>
+				<td class="label_left"  width="500">
+					<input type="checkbox" id="aboFlg_Chk" name="q1" value="1">　廃止する場合にチェック
+				</td>
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+			&nbsp;
+		</td>
+	</tr>
+</table>
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</form>
+</body>
+</html>

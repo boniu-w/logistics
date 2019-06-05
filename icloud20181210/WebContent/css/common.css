@@ -1,0 +1,239 @@
+@CHARSET "UTF-8";
+
+BODY {
+	background-color: #FFFFFF;
+}
+
+
+TABLE.body {
+	table-layout: auto;
+	width: 1204px;
+	height: 800px;
+}
+
+TABLE.header_area {
+	color: #000000;
+	font-weight: bold;
+	background-color: #FFFFFF;
+	font-family: "ＭＳ ゴシック", Arial;
+	table-layout: solid;
+	border: 1px solid #205AAC;
+	width : 1204px;
+	height: 60px;
+}
+
+TABLE.header {
+	font-weight: bold;
+	background-color: #FFFFFF;
+	font-family: "ＭＳ ゴシック", Arial;
+	width : 100%;
+	height: 100%;
+}
+
+TABLE.menu {
+	color: #000000;
+	font-weight: menu;
+	background-color: #FFFFFF;
+	font-family: "ＭＳ ゴシック", Arial;
+	table-layout: solid;
+	border: 1px solid #205AAC;
+	width : 250px;
+	height: 730px;
+}
+
+TABLE.main {
+	color: #000000;
+	font-weight: menu;
+	background-color: #FFFFFF;
+	font-family: "ＭＳ ゴシック", Arial;
+	table-layout: fixed;
+	border: 1px solid #205AAC;
+	width : 950px;
+	height: 730px;
+}
+
+TABLE.fixedTable {
+	table-layout: fixed;
+	width:880px; 
+}
+
+
+TABLE.data_table {
+	border-width: 1px;
+	border-color: black;
+	border-style: solid;
+	border-collapse: separate;
+	width: 100%;
+}
+
+TABLE.common_area {
+	background-color: #C8E1FF;
+	margin: 2pt 0pt;
+	table-layout: fixed;
+	width: 100%;
+}
+
+TH.col_header {
+	background-color: #0000FF;
+	color: #ffffff;
+	font-weight: bold;
+	font-style: normal;
+	font-size: 9pt;
+	text-align: center;
+	font-family: "ＭＳ Ｐゴシック";
+	margin: 3px 0px;
+	padding: 3px 0px;
+	border-width: 1px;
+	border-style: groove;
+	border-color: #AAAAAA;
+	white-space:nowrap;
+}
+
+
+TD.main {
+	vertical-align: top;
+}
+
+
+TD.menu {
+	text-align: left;
+	vertical-align: top;
+}
+
+TD.label_center {
+	font-size: 9pt;
+	font-family: "ＭＳ ゴシック";
+	text-align: center;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	border-width: 0px;
+	white-space:nowrap;
+}
+
+TD.label_left {
+	font-size: 9pt;
+	font-family: "ＭＳ ゴシック";
+	text-align: left;
+	margin-left: 5px;
+	margin-right: 0px;
+	padding-left: 5px;
+	padding-right: 0px;
+	white-space:nowrap;
+}
+
+TD.label_color {
+	width: 250;
+	padding: 0px 10px;
+	background-color: #C8E1FF;
+	font-style: normal;
+	font-size: 9pt;
+	text-align: left;
+	font-family: "ＭＳ Ｐゴシック";
+	white-space:nowrap;
+}
+
+TD.label_center_groove {
+	font-size: 9pt;
+	font-family: "ＭＳ ゴシック";
+	text-align: center;
+	margin-left: 0px;
+	margin-right: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+	border-width: 1px;
+	border-style: groove;
+	border-color: #AAAAAA;
+	white-space:nowrap;
+}
+
+
+
+
+INPUT.button_normal {
+	font-family: "ＭＳ ゴシック";
+	font-size: 8pt;
+	background-color: #D4D4D4;
+	padding: 2px 2px;
+	width: 70px;
+}
+
+INPUT.button_normal_bashB {
+	font-family: "ＭＳ ゴシック";
+	font-size: 8pt;
+	background-color: #D4D4D4;
+	padding: 2px 2px;
+	width: 100px;
+}
+
+
+
+
+<!-- SLVB301用に追加 -->
+TABLE.gymMain th {
+	background-color: #CDE9EB;
+	font-weight: normal;
+	font-style: normal;
+	font-size: 9pt;
+	text-align: left;
+	font-family: "ＭＳ Ｐゴシック";
+	margin: 2px 2px;
+	padding: 2px 2px;
+	border-width: 1px;
+	border-style: none;
+	white-space:nowrap;
+}
+
+TD.label_right {
+	font-size: 9pt;
+	font-family: "ＭＳ ゴシック";
+	text-align: right;
+	margin-left: 5px;
+	margin-right: 0px;
+	padding-left: 5px;
+	padding-right: 0px;
+	white-space:nowrap;
+}
+
+TABLE.gymMain th.loopTableHeader {
+	<!-- background-color: #D1CCC3;-->
+	background-color: #CDE9EB;
+	text-align: center;
+
+}
+
+INPUT.button_normal2 {
+	font-family: "ＭＳ ゴシック";
+	font-size: 9pt;
+	padding: 1px 1px;
+	width: 110px;
+}
+
+INPUT.button_dispSwitch {
+	font-family: "ＭＳ ゴシック";
+	font-size: 9pt;
+	padding: 1px 1px;
+	width: 20px;
+}
+
+INPUT.button_popup {
+	font-family: "ＭＳ ゴシック";
+	font-size: 9pt;
+	padding: 1px 1px;
+	width: 20px;
+}
+
+TABLE.gymMain INPUT {
+	font-family: "ＭＳ ゴシック";
+	font-size: 9pt;
+}
+
+TABLE.gymMain SELECT {
+	font-family: "ＭＳ ゴシック";
+	font-size: 9pt;
+}
+TD.vTop {
+ vertical-align: top;
+}
+

@@ -1,0 +1,251 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/common/taglibs.jsp"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/common.css" charset="UTF-8" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/SLMM117.css">
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery-3.1.0.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery.validate.js" charset="UTF-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/jquery.metadata.js" charset="UTF-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/messages_cn.js" charset="UTF-8"></script>
+<!-- 下面两行是别人做的正则验证操作,需替换为自己的 -->
+<script type="text/javascript" src="${pageContext.request.contextPath}/scripts/commons-vacation.js" charset="UTF-8"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/lmm101.js"></script>
+<script type="text/javascript">
+    
+    
+</script>
+</head>
+<body>
+<form action="http://localhost:8080/icloud20181210/lmm117Controller/findSomeField" method="post">
+<table  class="body">
+    <tr>
+    <td colspan="2">
+        <table  class="header_area">
+            <tr>
+                <td>
+                    <jsp:include page="header.jsp" flush="true"/>
+                </td>
+            </tr>
+        </table>
+    </td>
+    </tr>
+    <tr>
+        <td>
+            <table class="menu">
+                <tr >
+                    <td class="menu">
+                        <jsp:include page="menu.jsp" flush="true"/>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="main">
+                <tr>
+                    <td class="main">
+
+<table>
+	<tr >
+		<td>
+		<table class="fixedTable">
+			<tr>
+				<td class="label_center" class="spacewidth" >
+					&nbsp;
+				</td>
+				<td class="label_color lablewidth" >
+					<nobr>検索範囲</nobr>
+				</td>
+				<td class="label_left inputwidth" ><nobr>
+					<input type="radio" name="searchScope_Rdo" />
+					<label for="searchScope:1">全件</label>
+					&nbsp;
+					<input type="radio" name="searchScope_Rdo" checked/>
+					<label for="searchScope:2">廃止を除く</label>
+					</nobr>
+				</td>
+				<td class="spacewidth">
+					&nbsp;
+				</td>
+				<td class="lablewidth">
+					&nbsp;
+				</td>
+				<td class="inputwidth">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>申請組織コード</nobr></td>
+				<td class="label_left" >
+					<input type="text" id="appOrgCode_Txt" name="appOrgCode_Txt" 
+					maxlength="12" size="37" value="${hashMap. appOrgCode_Txt}"/>
+				<td >
+					&nbsp;
+				</td>
+
+				</td>
+				<td class="label_color"><nobr>主輸送モード区分</nobr></td>
+				<td class="label_left" >
+					<select id="mainTransportationModeKbn_Sct" name="mainTransportationModeKbn_Sct" 
+					size="1" >
+						<option value="">R[主輸送モード区分]</option>
+					</select>
+				</td>
+
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>出荷場所コード</nobr></td>
+				<td class="label_left" >
+					<input type="text" id="shipmentPlaceCode_Txt" name="shipmentPlaceCode_Txt"
+					maxlength="25" size="37" value="${hashMap. shipmentPlaceCode_Txt}"/>
+				</td>
+				
+				<td >
+					&nbsp;
+				</td>
+				<td class="label_color" ><nobr>出荷場所名</nobr></td>
+				<td class="label_left"  >
+					<input type="text" id="shipmentPlaceName_Txt" name="shipmentPlaceName_Txt" 
+					maxlength="256" size="37" value="${hashMap. shipmentPlaceName_Txt}"/>
+				</td>
+			</tr>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>最終届先場所コード</nobr></td>
+				<td class="label_left" >
+				<input type="text" id="finalDestinationCode_Txt" name="finalDestinationCode_Txt"
+				maxlength="25" size="37" value="${hashMap. finalDestinationCode_Txt}"/>
+				</td>
+				<td >
+					&nbsp;
+				</td>
+				<td class="label_color" ><nobr>最終届先場所名</nobr></td>
+				<td class="label_left"  >
+				<input type="text" id="finalDestinationName_Txt" name="finalDestinationName_Txt"
+				maxlength="256" size="37" value="${hashMap. finalDestinationName_Txt}" />
+				</td>
+			<tr>
+				<td class="label_center">
+					&nbsp;
+				</td>
+				<td class="label_color"><nobr>トラッキングGコード</nobr></td>
+				<td class="label_left" >
+				<input type="text" id="trackingGCode_Txt" name="trackingGCode_Txt"
+				maxlength="12" size="37" value="${hashMap. trackingGCode_Txt}"/>
+				</td>
+				<td >
+					&nbsp;
+				</td>
+				<td class="label_color" ><nobr>トラッキングG名</nobr></td>
+				<td class="label_left"  >
+				<input type="text" id="trackingGName_Txt" name="trackingGName_Txt"
+				maxlength="50" size="37"  value="${hashMap. trackingGName_Txt}"/>
+				</td>
+			</tr>
+
+			</tr>
+		</table>
+		</td>
+	</tr>
+	<tr>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td align= "right">
+			<input type="submit" value="検索" id="search_Btn"
+				class="button_normal" /></input> &nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td>
+		&nbsp;
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2">
+		<div class="tablearea">
+		<table id="gnrprp_List" class="data_table">
+			<tr>
+				<th class="col_header">選択</th>
+				<th class="col_header">廃止</th>
+				<th class="col_header">申請組織</th>
+				<th class="col_header">出荷場所</th>
+				<th class="col_header">最終届先場所</th>
+				<th class="col_header">主輸送モード</th>
+				<th class="col_header">トラッキンググループ</th>
+			</tr>
+			<!-- 这部分从数据库得到 -->
+			<c:forEach items="${list}" var="list">
+                    <tr>
+                    
+                        <td class="label_center_groove">
+                        <input type="radio"  name="ck" value="1" />
+                         </td>
+                         
+                        <td class="label_center_groove">
+                            <c:choose>
+                                <c:when test="${list.aboflg==0}">〇</c:when>
+                                <c:otherwise><br></c:otherwise>
+                            </c:choose>
+                        </td>
+                        <td class="label_center_groove">${list.apporgcod}</td>
+                        <td class="label_center_groove">${list.plcnam_from}</td>
+                        <td class="label_center_groove">${list.plcnam_goto}</td>
+                        <td class="label_center_groove">${list.mtrsmdkbn}</td>
+                        <td class="label_center_groove">${list.trkgrpnam}</td>
+                        
+                    </tr>
+                </c:forEach>
+                                                            
+		</table>
+		</div>
+		</td>
+	</tr>
+</table>
+<table class="common_area">
+	<tr>
+		<td align="left">
+			<input type="button" value= "DashBoardへ戻る" id="dashBoard_Btn" 
+			class="button_normal_bashB" onclick="javascript:history.back(-1);" /> 
+		</td>
+		<td align="right">
+			<input type="submit" value= "新規" id="insert_Btn" class="button_normal" /> 
+			<input type="submit" value= "変更" id="modify_Btn" class="button_normal" />
+		</td>
+	</tr>
+</table>
+
+
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+</form>
+</body>
+</html>

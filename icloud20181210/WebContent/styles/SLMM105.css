@@ -1,0 +1,24 @@
+@CHARSET "windows-31j";
+
+TD.spacewidth {
+	width : 80px;
+}
+
+
+TD.lablewidth {
+	width : 150px;
+}
+
+TD.inputwidth1 {
+	width : 180px;
+}
+
+TD.inputwidth2 {
+	width : 220px;
+}
+
+DIV.tablearea {
+	width:940px;
+	height:500px; 
+	overflow-y:scroll;
+}

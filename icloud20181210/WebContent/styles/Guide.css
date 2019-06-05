@@ -1,0 +1,369 @@
+﻿/* 管理后台左侧body样式定义 */
+#Guidebody
+{
+    background: #a9c9ee;
+    padding: 5px 0px 0px 0px;
+    margin: 0px;
+}
+
+/* 管理后台左侧菜单样式定义 */
+/* ====菜单背景==== */
+#Guide_back, #Guide_back ul, #Guide_back li
+{
+    padding: 0px;
+    margin: 0px;
+    list-style-type: none;
+}
+img{border:0px;}
+#Guide_back
+{
+    background: url(../images/Guide_main.gif) #a9c9ee repeat-y left;
+}
+
+/* ====菜单顶部==== */
+#Guide_top
+{
+    height: 57px;
+    background: url(../images/Guide_top.gif) #a9c9ee no-repeat left top fixed;
+}
+#Guide_toptext
+{
+    font-family: "宋体";
+    font-size: 14px;
+    font-weight: bold;
+    color: #28569b;
+    padding-top: 25px;
+    margin: 0px 0px 0px 60px;
+}
+
+/* ====菜单中部==== */
+#Guide_main
+{
+    margin: 0px;
+    padding: 0px;
+}
+#Guide_box
+{
+    margin: 0px 0px 0px 10px;
+    padding: 0px;
+}
+
+/* ====菜单内容项目样式==== */
+.guideexpand, .guidecollapse
+{
+    height: 25px;
+    line-height: 25px;
+    padding-left: 30px;
+    text-align: left;
+    cursor: pointer;
+    font-family: "宋体";
+    font-size: 12px;
+    font-weight: bold;
+    color: #08377c;
+}
+/*  ===新增式样===   */
+.guidecollapse1, .guideexpand1
+{
+    height: 25px;
+    
+    line-height: 25px;
+    
+    text-align: left;
+    cursor: pointer;
+    font-family: "宋体";
+    font-size: 12px;
+    /*font-weight: bold;*/
+    color: #08377c;
+}
+/*  =====新建结束=====   */
+
+
+.guideexpand
+{
+    background: url(../images/guide_expand.gif) no-repeat left center;
+}
+.guidecollapse
+{
+    background: url(../images/guide_collapse.gif) no-repeat left center;
+}
+
+.guide, .guidesearch
+{
+    background-color: #fff;
+    margin-right: 15px;
+}
+.guide ul, .guide li
+{
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none;
+    background-color: #fff;
+}
+.guidesearch
+{
+    margin-top: 2px;
+    line-height: 25px;
+    text-align: center;
+}
+
+/* ====.guide li高度兼容样式==== */
+.guide li
+{
+    background-color: #fff;
+    line-height: 140%;
+}
+* html .guide li /* IE6解析 */
+{
+    height: 20px;
+}
+
+.guide a
+{
+    display: block;
+    text-align: left;
+    padding: 3px 0px 3px 8px;
+    text-decoration: none;
+}
+.guide a:link, .guide a:visited
+{
+    height: 20px;
+    line-height: 20px;
+    color: #4579b9;
+    border: 1px solid #fff;
+}
+.guide a:hover
+{
+    color: #c00;
+    border: 1px solid #e6eff8;
+    background-color: #f2f8fd;
+    text-decoration: none;
+}
+
+.guide .selected a
+{
+    color: #c00;
+    border: 1px solid #e6eff8;
+    background: #f2f8fd no-repeat 5px center;
+    text-decoration: none;
+}
+
+/* ====菜单底部==== */
+#Guide_bottom
+{
+    height: 13px;
+    background: url(../images/Guide_bottom.gif) #adcbef no-repeat left top;
+}
+
+.refresh
+{
+    position: absolute;
+    top: 29px;
+    left: 160px;
+    width: 15px;
+    height: 15px;
+    background: url(../images/refresh.gif) no-repeat center center;
+    cursor: pointer;
+}
+
+.quickLink li
+{
+    float: left;
+    white-space: nowrap;
+}
+
+/* 浮动窗口 */
+.floatingIframe
+{
+    background: none;
+}
+.floatingDialog
+{
+    position: absolute;
+    z-index: 50;
+    margin: 0 auto;
+    background: transparent;
+}
+.floatingDialog li
+{
+    margin: 0;
+}
+.floatingDialog .fdtop
+{
+    position: relative;
+    height: 34px;
+    background: transparent url(../images/p-up-t-l.gif) 0 0 no-repeat;
+}
+.floatingDialog .fdtop dl
+{
+    height: 34px;
+    background: url(../images/p-up-t-r.gif) right top no-repeat;
+    padding: 0 8px;
+}
+.floatingDialog .fdtop dd
+{
+    height: 34px;
+    background: url(../images/p-up-t.gif) top repeat-x;
+}
+.floatingDialog .fdtop dd li
+{
+    display: block;
+    float: left;
+    margin-left: 0;
+}
+.floatingDialog .fdtop dd li.close
+{
+    float: right;
+    width: 18px;
+    height: 18px;
+    padding: 8px;
+}
+.floatingDialog .fdtop dd li.close a
+{
+    display: block;
+    width: 18px;
+    height: 18px;
+    background: url(../images/p-up-close.gif) left center no-repeat;
+}
+.floatingDialog .fdtop dd li.close a:hover
+{
+    background: url(../images/p-up-close2.gif) left center no-repeat;
+}
+.floatingDialog .fdtop dd li.title
+{
+    position: absolute;
+    left: -6px;
+    background: url(../images/p-up-ico.gif) 15px 12px no-repeat;
+    height: 34px;
+    line-height: 34px;
+    padding-left: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4f4f4f;
+}
+.floatingDialog_handle
+{
+    cursor: move;
+}
+.floatingDialog .floatingDialog_content
+{
+    background: url(../images/p-up-con-bg.gif) top repeat-x #fff;
+    border-left: 1px solid #b1ceee;
+    border-right: 1px solid #b1ceee;
+    padding: 12px;
+}
+
+.floatingDialog .fdbottom
+{
+    height: 3px;
+    font-size: 0;
+    background: url(../images/p-up-b-l.gif) top left;
+}
+.floatingDialog .fdbottom dl
+{
+    display: block;
+    height: 3px;
+    padding: 0 3px;
+    background: url(../images/p-up-b-r.gif) top right no-repeat;
+}
+.floatingDialog .fdbottom dt
+{
+    background: url(../images/p-up-b.gif) top repeat-x;
+    height: 3px;
+}
+
+.floatingDialogFontSkin
+{
+    cursor: pointer;
+    color: red;
+}
+/*==书签菜单定义开始==*/
+#AdminTabs
+{
+    height: 24px;
+    clear: both;
+}
+#AdminTabs, #AdminTabs ul, #AdminTabs li
+{
+    margin: 0px;
+    padding: 0px;
+}
+/*书签右侧间隔*/
+#AdminTabs li
+{
+    cursor: pointer;
+    margin-right: 2px;
+    font-weight: bold;
+}
+#AdminTabs li, #AdminTabs a
+{
+    float: left;
+}
+/*-左背景，等同图片宽度-*/
+#AdminTabs a
+{
+    background: url("../images/tableft.gif") no-repeat left top;
+    margin: 0px;
+    padding-left: 3px;
+    text-decoration: none;
+    font: normal normal normal 12px/24px Arial, "宋体" ,Helvetica,sans-serif;
+    display: block;
+    text-align: center; /*_width:70px;*/
+    min-width: 70px;
+}
+
+/*-右背景，左缩进需减去左背景缩进-*/
+#AdminTabs a span
+{
+    float: none;
+    display: block;
+    background: url("../images/tabright.gif") no-repeat right top;
+    padding: 0px 8px 0px 5px;
+    color: #000;
+}
+/*-背景定位-*/
+#AdminTabs a:hover, #AdminTabs #current a
+{
+    background-position: 0% -24px;
+}
+#AdminTabs a:hover span, #AdminTabs #current a span
+{
+    background-position: 100% -24px;
+    color: #fff;
+}
+/*==书签菜单定义结束==*/
+/*节点搜索*/
+.Searchinputtext, .Searchinputtext_hover, .Searchinputtext_focus
+{
+    line-height: 20px;
+    border: #7F9DB9 solid 1px;
+    width: 140px;
+    height: 16px;
+    position: absolute;
+    left: 30px;
+    top: 66px;
+}
+.Searchinputtext_hover, .Searchinputtext_focus
+{
+    border: #3575BA solid 1px;
+}
+.Searchinputtext_focus
+{
+    background-color: #FFFFD8;
+}
+.searchb, .searcha
+{
+    background-image: url(../images/SearchN.gif);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    z-index: 9999;
+    left: 155px;
+    top: 67px;
+    width: 15px;
+    height: 15px;
+}
+.searcha
+{
+    background-image: url(../images/SearchX.gif);
+    display: none;
+}

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm102Mapper">
+    <!-- 更新の初期化表示情報 -->
+    <select id="updateSelect" resultType="Lmmmorg" parameterType="String">
+        select
+            tntcod,
+            orgcod,
+            aboflg,
+            orgnam1,
+            orgnam2,
+            orgnam3,
+            orgnam4,
+            orgnam5,
+            orgkbn01,
+            orgkbn02,
+            apporgcod,
+            appstaymdhms,
+            appendymdhms,
+            insymdhms,
+            insnam,
+            inskbn,
+            insmethodkbn,
+            updeac,
+            updymdhms,
+            updnam,
+            updkbn,
+            updmethodkbn  
+        from Lmmmorg 
+        where orgcod= #{orgcod,jdbcType=VARCHAR} and 
+              to_char(appstaymdhms,'yyyy-MM-dd')=#{appstaymdhms,jdbcType=TIME} and
+              tntcod = #{tntcod}
+    </select>
+    <!-- 区分リストの作成 -->
+    <select id="selectFind" resultType="Lmmmgrl" parameterType="String">
+        select gnrprpcod,
+               gnrprpnam1
+               from Lmmmgrl 
+        where
+            tntcod= #{lgustntcod} and
+            gnrprpkbn = #{generalFlg}
+    </select>
+    
+    <!-- 組織情報の更新処理 -->
+    <update id="upDate"  parameterType="Lmmmorg">
+        update Lmmmorg
+        <set>
+            <if test="aboflg != null and aboflg !=''">
+            aboflg = #{aboflg},
+            </if>
+            <if test="orgnam1 != null and orgnam1 !=''">
+            orgnam1 = #{orgnam1},
+            </if>
+            <if test="orgnam2 != null and orgnam2 !=''">
+            orgnam2 = #{orgnam2},
+            </if>
+            <if test="orgnam3 != null and orgnam3 !=''">
+            orgnam3 = #{orgnam3},
+            </if>
+            <if test="orgnam4 != null and orgnam4 !=''">
+            orgnam4 = #{orgnam4},
+            </if>
+            <if test="orgnam5 != null and orgnam5 !=''">
+            orgnam5 = #{orgnam5},
+            </if>
+            <if test="orgkbn01 != null and orgkbn01 !=''">
+            orgkbn01 = #{orgkbn01},
+            </if>
+            <if test="orgkbn02 != null and orgkbn02 !=''">
+            orgkbn02 = #{orgkbn02},
+            </if>
+            <if test="apporgcod != null and apporgcod !=''">
+            apporgcod = #{apporgcod},
+            </if>
+            <if test="appendymdhms != null">
+            appendymdhms = #{appendymdhms},
+            </if>
+            <if test="updeacafter != null">
+            updeac = #{updeacafter, jdbcType=NUMERIC},
+            </if>
+            updymdhms = sysdate,
+            <if test="updnam != null and updnam !=''">
+            updnam = #{updnam},
+            </if>
+            <if test="updkbn != null and updkbn !=''">
+            updkbn = #{updkbn},
+            </if>
+            <if test="updmethodkbn != null and updmethodkbn !=''">
+            updmethodkbn = #{updmethodkbn}
+            </if>
+        </set> 
+        where  tntcod=#{tntcod} 
+            and orgcod=#{orgcod}
+            and appstaymdhms = #{appstaymdhms}
+            and updeac = #{updeac,jdbcType=NUMERIC}
+    </update>
+    <!-- 組織情報の新規処理 -->
+    <insert id="insert" parameterType="Lmmmorg">
+        insert into Lmmmorg (
+            tntcod,
+            orgcod,
+            aboflg,
+            orgnam1,
+            orgnam2,
+            orgnam3,
+            orgnam4,
+            orgnam5,
+            orgkbn01,
+            orgkbn02,
+            apporgcod,
+            appstaymdhms,
+            appendymdhms,
+            insymdhms,
+            insnam,
+            inskbn,
+            insmethodkbn,
+            updeac,
+            updymdhms,
+            updnam,
+            updkbn,
+            updmethodkbn
+            )values(
+            #{tntcod},
+            #{orgcod},
+            #{aboflg},
+            #{orgnam1,jdbcType=VARCHAR},
+            #{orgnam2,jdbcType=VARCHAR},
+            #{orgnam3,jdbcType=VARCHAR},
+            #{orgnam4,jdbcType=VARCHAR},
+            #{orgnam5,jdbcType=VARCHAR},
+            #{orgkbn01,jdbcType=VARCHAR},
+            #{orgkbn02,jdbcType=VARCHAR},
+            #{apporgcod,jdbcType=VARCHAR},
+            #{appstaymdhms},
+            #{appendymdhms},
+            #{insymdhms},
+            #{insnam},
+            #{inskbn},
+            #{insmethodkbn},
+            #{updeac},
+            #{updymdhms},
+            #{updnam},
+            #{updkbn},
+            #{updmethodkbn})
+    </insert>
+    
+    <!-- 組織コードのチェック -->
+     <select id="checkOrgCode" resultType="int" parameterType="String">
+        select count(t.orgcod) 
+        from lmmmorg t 
+        where
+            t.tntcod= #{tntcod} and
+            t.orgcod = #{orgCodeVal}
+    </select>
+</mapper>
