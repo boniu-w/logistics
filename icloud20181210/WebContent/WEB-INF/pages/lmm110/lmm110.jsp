@@ -43,10 +43,10 @@
 											<table>
 												<tr>
 													<td class="label_normal" width="100">&nbsp;</td>
-													<td class="label_normal" width="200"><u><nobr>前回更新ユーザ&nbsp;${lmm110.updateUserCode_Lbl}</nobr></u>
+													<td class="label_normal" width="200"><u><nobr>前回更新ユーザ&nbsp;${lmm110.updnam}</nobr></u>
 													</td>
 													<td class="label_normal" width="180">&nbsp;</td>
-													<td class="label_normal" width="200"><u><nobr>前回更新日時：${lmm110.updateYmdhm_Lbl}</nobr></u>
+													<td class="label_normal" width="200"><u><nobr>前回更新日時：${lmm110.updymdhms}</nobr></u>
 													</td>
 												</tr>
 											</table>
@@ -65,7 +65,7 @@
 													<td class="label_left" width="500">
 													
 														<input  type="text" id="itemCode_Txt" maxlength="35" size="74"
-														name="itemCode_Txt" value="${lmm110.itemCode_Txt}"
+														name="itmcod" value="${lmm110.itmcod}"
 														<c:if test='${modFlg==1}'>readOnly="readOnly"</c:if>
 														<c:if test='${modFlg==0}'>autofocus</c:if>/>
 													</td>
@@ -75,12 +75,16 @@
 													<td class="label_color" width="200"><nobr>適用開始日時</nobr></td>
 													<td class="label_left" width="500">
 														<input type="date" id="appStaYmd_Txt" maxlength="10"
+<<<<<<< .mine
 															name="appStaYmd_Txt" size="10" value="${lmm110.appStaYmd_Txt}" 
 															<c:if test='${modFlg==1}'>autofocus</c:if>/>
+=======
+															name="appStaymd" size="10" value="${lmm110.appStaymd}" <c:if test='${modFlg==1}'>autofocus</c:if>/>
+>>>>>>> .r568
 														<input type="text" id="appStaHh_Txt" maxlength="2" size="2"
-															name="appStaHh_Txt" value="${lmm110.appStaHh_Txt}"/>:
+															name="appStaHh" value="${lmm110.appStaHh}"/>:
 														<input type="text" id="appStaMm_Txt" maxlength="2" size="2"
-															name="appStaMm_Txt" value="${lmm110.appStaMm_Txt}""/>
+															name="appStaMm" value="${lmm110.appStaMm}""/>
 													</td>
 												</tr>
 												<tr>
@@ -89,11 +93,11 @@
 													</td>
 													<td class="label_left" width="500">
 														<input type="date" id="appEndYmd_Txt" maxlength="10"
-															name="appEndYmd_Txt" size="10" value="${lmm110.appEndYmd_Txt}"/>
+															name="appEndymd" size="10" value="${lmm110.appEndymd}"/>
 														<input type="text" id="appEndHh_Txt" maxlength="2" size="2"
-															name="appEndHh_Txt" value="${lmm110.appEndHh_Txt}"/>:
+															name="appEndHh" value="${lmm110.appEndHh}"/>:
 														<input type="text" id="appEndMm_Txt" maxlength="2" size="2"
-															name="appEndMm_Txt" value="${lmm110.appEndMm_Txt}"/>
+															name="appEndMm" value="${lmm110.appEndMm}"/>
 													</td>
 												</tr>
 												<tr>
@@ -101,7 +105,7 @@
 													<td class="label_color" width="200"><nobr>商品名</nobr></td>
 													<td class="label_left" width="500">
 														<input type="text" id="itemName_Txt" maxlength="50" size="74"
-															name="itemName_Txt" value="${lmm110.itemName_Txt}"/>
+															name="itmnam1" value="${lmm110.itmnam1}"/>
 													</td>
 												</tr>
 												<tr>
@@ -110,19 +114,19 @@
 													</td>
 													<td class="label_left" width="500">
 														<input type="text" id="applyOrgCod_Txt" maxlength="12" size="15"
-															name="appOrgCod_Txt" value="${lmm110.appOrgCod_Txt}"/>
+															name="apporgcod" value="${lmm110.apporgcod}"/>
 														<input type="button" value="検索" id="applyOrgSearch_Btn"
 															class="button_normal" onclick="openWindow()"/>
 														<input type="text" id="applyOrg_Lbl" maxlength="12" size="45"
-															name="applyOrg_Lbl" readonly="readonly"/>
+															name="orgnam1" readonly="readonly" value="${lmm110.orgnam1}"/>
 													</td>
 												</tr>
 												<tr>
 													<td class="label_center">&nbsp;</td>
 													<td class="label_color" width="200"><nobr>廃止フラグ</nobr></td>
 													<td class="label_left" width="500">
-														<input type="checkbox" id="aboFlg_Chk" name="aboFlg_Chk" 
-															<c:if test='${lmm110.aboFlg_Chk=="1"}'>checked="checked"</c:if>
+														<input type="checkbox" id="aboFlg_Chk" name="aboflg" 
+															<c:if test='${lmm110.aboflg=="1"}'>checked="checked"</c:if>
 															<c:if test='${modFlg=="0"}'>onclick="return false;"</c:if>/>
 															廃止する場合にチェック
 													</td>
@@ -176,7 +180,13 @@
 				</td>
 			</tr>
 		</table>
-		<input type="text" name="updEac_Hdn" value="${lmm110.updEac_Hdn}" style="display: none;"/>
+		<!-- 更新回数の保持 -->
+		<input type="text" name="updeac" value="${lmm110.updeac}" style="display: none;"/>
+		<!-- 一覧画面の検索条件の保持 -->
+		<input type="text" id="searchScope_" name="searchScope_" value="${lmm109DtoKsjk.searchScope_Rdo}" style="display: none;">
+		<input type="text" id="applyOrgCode_" name="applyOrgCode_" value="${lmm109DtoKsjk.applyOrgCode_Txt}" style="display: none;">
+		<input type="text" id="itemCode_" name="itemCode_" value="${lmm109DtoKsjk.itemCode_Txt}" style="display: none;">
+		<input type="text" id="itemName_" name="itemName_" value="${lmm109DtoKsjk.itemName_Txt}" style="display: none;">
 	</form>
 </body>
 </html>

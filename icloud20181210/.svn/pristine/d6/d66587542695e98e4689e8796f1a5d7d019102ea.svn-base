@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm108_2Mapper">
+	
+	<!-- 二重登録チェック	 -->
+	<select id="selectOne" resultType="lmmmevtm" parameterType="lmmmevtm">
+		select * from Lmmmevtm where 
+		tntcod = #{tntcod} and 
+		evtmrgcod = #{evtmrgcod}		
+	</select>
+	
+	<!-- 申請組織コードが組織マスタに未登録の場合（申請組織コードが入力されている場合のみ） -->														
+	<select id="selectLmmmorg" resultType="lmmmorg" parameterType="lmmmorg">
+		select * from Lmmmorg where
+			tntcod = #{tntcod} and
+			orgcod = #{orgcod} and
+			sysdate between appstaymdhms and appendymdhms and
+            aboflg = 0
+	</select>
+	
+	<!-- 組織情報の新規処理 -->
+	<insert id="insertLmmmevtm" parameterType="Lmmmevtm">
+		insert into Lmmmevtm (
+			tntcod,evtmrgcod,aboflg,evtmrgnam,dispnum,apporgcod,insymdhms,
+			insnam,inskbn,insmethodkbn,updeac,updymdhms,updnam,updkbn,updmethodkbn)
+			values(
+			#{tntcod},
+			#{evtmrgcod,jdbcType=VARCHAR},
+			#{aboflg},
+			#{evtmrgnam,jdbcType=VARCHAR},
+			#{dispnum,jdbcType=VARCHAR},
+			#{apporgcod,jdbcType=VARCHAR},
+			#{insymdhms,jdbcType=TIME},
+			#{insnam,jdbcType=VARCHAR},
+			#{inskbn,jdbcType=VARCHAR},
+			#{insmethodkbn,jdbcType=VARCHAR}, 
+			#{updeac,jdbcType=NUMERIC},
+			#{updymdhms,jdbcType=TIME},
+            #{updnam,jdbcType=VARCHAR},
+            #{updkbn,jdbcType=VARCHAR},
+            #{updmethodkbn,jdbcType=VARCHAR})
+        	
+	</insert>
+	<!-- 組織情報の更新処理 -->
+	<update id="updateLmmmevtm" parameterType="Lmmmevtm">
+		update lmmmevtm
+		<set>
+            <if test="evtmrgnam != null and evtmrgnam !=''">
+            	evtmrgnam = #{evtmrgnam,jdbcType=VARCHAR},
+            </if>
+            <if test="dispnum != null and dispnum !=''">
+            	dispnum = #{dispnum,jdbcType=VARCHAR},
+            </if>
+            <if test="apporgcod != null and apporgcod !=''">
+            	apporgcod = #{apporgcod,jdbcType=VARCHAR},
+            </if>
+            <if test="aboflg != null and aboflg !=''">
+            	aboflg = #{aboflg,jdbcType=VARCHAR},
+            </if>
+            <if test="insymdhms != null">
+            	insymdhms = #{insymdhms},
+            </if>
+            <if test="insnam != null and insnam !=''">
+            	insnam = #{insnam,jdbcType=VARCHAR},
+            </if>
+            <if test="inskbn != null and inskbn !=''">
+            	inskbn = #{inskbn,jdbcType=VARCHAR},
+            </if>
+            <if test="insmethodkbn != null and insmethodkbn !=''">
+            	insmethodkbn = #{insmethodkbn,jdbcType=VARCHAR},
+            </if>
+            updeac = updeac+1,
+            updymdhms = sysdate,
+            <if test="updnam != null and updmethodkbn !=''">
+            	updnam = #{updnam,jdbcType=VARCHAR},
+            </if>
+            <if test="updkbn != null and updmethodkbn !=''">
+            	updkbn = #{updkbn,jdbcType=VARCHAR},
+            </if>
+            <if test="updmethodkbn != null and updmethodkbn !=''">
+            	updmethodkbn = #{updmethodkbn,jdbcType=VARCHAR},
+            </if>
+        </set> 
+		where tntcod = #{tntcod} and 
+        	  evtmrgcod = #{evtmrgcod} and
+        	  updeac = #{updeac}
+	</update>
+</mapper>

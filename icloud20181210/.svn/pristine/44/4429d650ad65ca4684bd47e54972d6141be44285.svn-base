@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm110Mapper">
+	<!-- LMM110DtoToのMap -->
+	<resultMap type="lmm110DtoTo" id="lmm110DtoToMap">
+		<result column="updnam" jdbcType="VARCHAR" property="updnam"/>
+		<result column="updymdhms" jdbcType="VARCHAR" property="updymdhms"/>
+		<result column="itmcod" jdbcType="VARCHAR" property="itmcod"/>
+		<result column="appStaymdhms" jdbcType="TIMESTAMP" property="appStaymdhms"/>
+		<result column="appEndymdhms" jdbcType="TIMESTAMP" property="appEndymdhms"/>
+		<result column="itmnam1" jdbcType="VARCHAR" property="itmnam1"/>
+		<result column="apporgcod" jdbcType="VARCHAR" property="apporgcod"/>
+		<result column="orgnam1" jdbcType="VARCHAR" property="orgnam1"/>
+		<result column="aboflg" jdbcType="VARCHAR" property="aboflg"/>
+		<result column="updeac" jdbcType="INTEGER" property="updeac"/>
+	</resultMap>
+	<!-- 更新の初期化表示情報 -->
+	<select id="updateSelect" resultMap="lmm110DtoToMap"
+		parameterType="lmm110DtoTo">
+		select
+			itm.updnam,<!-- 更新者 -->
+			itm.updymdhms,<!-- 更新年月日時分秒 -->
+			itm.itmcod,<!-- 商品コード -->
+			itm.appStaymdhms,<!-- 適用開始日時 -->
+			itm.appEndymdhms,<!-- 適用終了日時 -->
+			itm.itmnam1,<!-- 商品名 -->
+			itm.apporgcod,<!-- 申請組織コード -->
+			org.orgnam1,<!-- 組織名 -->
+			itm.aboflg,<!-- 廃止フラグ -->
+			itm.updeac<!-- 更新回数 -->
+		from lmmmitm itm
+		left join lmmmorg org
+		on itm.apporgcod=org.orgcod
+		where itm.tntcod=#{tntcod} and itm.itmcod=#{itmcod} 
+		and itm.appstaymdhms=#{appStaymdhms,jdbcType=TIMESTAMP}
+	</select>
+	<!-- 挿入の操作 -->
+	<insert id="insert" parameterType="lmm110DtoTo">
+		insert into lmmmitm(
+			tntcod,<!-- テナントコード -->
+			updnam,<!-- 更新者 -->
+			updymdhms,<!-- 更新年月日時分秒 -->
+			itmcod,<!-- 商品コード -->
+			appstaymdhms,<!-- 適用開始日時 -->
+			appendymdhms,<!-- 適用終了日時 -->
+			itmnam1,<!-- 商品名 -->
+			apporgcod,<!-- 申請組織コード -->
+			aboflg,<!-- 廃止フラグ -->
+			insymdhms,<!-- 登録年月日時分秒 -->
+			insnam,<!-- 登録者 -->
+			inskbn,<!-- 登録者区分 -->
+			insmethodkbn,<!-- 登録方法区分 -->
+			updeac,<!-- 更新回数 -->
+			updkbn,<!-- 更新者区分 -->
+			updmethodkbn<!-- 更新方法区分 -->
+		)values
+		(#{tntcod,jdbcType=VARCHAR},#{updnam,jdbcType=VARCHAR},#{updymdhms,jdbcType=VARCHAR},
+		#{itmcod,jdbcType=VARCHAR},#{appStaymdhms,jdbcType=TIMESTAMP},#{appEndymdhms,jdbcType=TIMESTAMP},
+		#{itmnam1,jdbcType=VARCHAR},#{apporgcod,jdbcType=VARCHAR},#{aboflg,jdbcType=VARCHAR},
+		#{insymdhms,jdbcType=TIMESTAMP},#{insnam,jdbcType=VARCHAR},#{inskbn,jdbcType=VARCHAR},
+		#{insmethodkbn,jdbcType=VARCHAR},#{updeac},#{updkbn,jdbcType=VARCHAR},#{updmethodkbn,jdbcType=VARCHAR})
+	</insert>
+	<!-- 更新の操作 -->
+	<update id="update" parameterType="lmm110DtoTo">
+		update
+			lmmmitm
+		set
+			aboflg=#{aboflg,jdbcType=VARCHAR},<!-- 廃止フラグ -->
+			itmnam1=#{itmnam1,jdbcType=VARCHAR},<!-- 商品名 -->
+			apporgcod=#{apporgcod,jdbcType=VARCHAR},<!-- 申請組織コード -->
+			appendymdhms=#{appEndymdhms,jdbcType=TIMESTAMP},<!-- 適用終了日 -->
+			updeac=updeac+1,<!-- 更新回数 -->
+			updymdhms=#{updymdhms,jdbcType=TIMESTAMP},<!-- 更新年月日時分秒 -->
+			updnam=#{updnam,jdbcType=VARCHAR},<!-- 更新者 -->
+			updkbn=#{updkbn,jdbcType=VARCHAR},<!-- 更新者区分 -->
+			updmethodkbn=#{updmethodkbn,jdbcType=VARCHAR}<!-- 更新方法区分 -->
+		where
+			tntcod=#{tntcod,jdbcType=VARCHAR} and itmcod=#{itmcod,jdbcType=VARCHAR} 
+			and appstaymdhms=#{appStaymdhms,jdbcType=TIMESTAMP} and updeac=#{updeac}
+	</update>
+	<!-- 商品コードがあるかどうかを照会する -->
+	<select id="checkItmcod" resultType="Integer" parameterType="lmm110DtoTo">
+		select
+			count(*)
+		from
+			lmmmitm
+		where tntcod=#{tntcod} and itmcod=#{itmcod} 
+		and appStaymdhms=#{appStaymdhms,jdbcType=TIMESTAMP}
+	</select>
+	<!-- 申請組織コードがあるかどうかを照会する -->
+	<select id="checkApporgcod" resultType="Integer" parameterType="lmm110DtoTo">
+		select
+			count(*)
+		from
+			lmmmorg
+		where
+		<![CDATA[
+			tntcod=#{tntcod} and orgcod=#{apporgcod} 
+			and appStaymdhms<=sysdate and appEndymdhms>=sysdate and aboflg='0'
+		]]>
+	</select>
+	<!-- 申請組織コードによる組織名を照会する -->
+	<select id="selectOrg" resultType="lmmmorg" parameterType="String">
+		select
+			orgcod,<!-- 組織コード -->
+			appstaymdhms,<!-- 適用開始日時 -->
+			appendymdhms,<!-- 適用終了日時 -->
+			orgnam1,<!-- 組織名1 -->
+			orgnam2,<!-- 組織名2 -->
+			orgnam3,<!-- 組織名3 -->
+			orgnam4,<!-- 組織名4 -->
+			orgnam5<!-- 組織名5 -->
+		from
+			lmmmorg
+		where tntcod=#{tntcod} 
+		<if test="orgcod!=null and orgcod!=''">
+			and orgcod like '%${orgcod}%'
+		</if>
+		<if test="orgnam1!=null and orgnam1!=''">
+			and orgnam1 like '%${orgnam1}%'
+		</if>
+	</select>
+</mapper>

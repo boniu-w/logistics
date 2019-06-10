@@ -1,0 +1,181 @@
+package org.cloud.webapp.controller;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.Constants;
+import org.cloud.dto.Lmm117ResultType;
+import org.cloud.model.Lmmmgrl;
+import org.cloud.service.Lmm101Service;
+import org.cloud.service.impl.Lmm117ServiceImpl;
+import org.cloud.webapp.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.util.MessageSource;
+
+/**
+ * @author WG
+ * @date 2019年5月22日 下午8:46:51
+ */
+@Controller
+@RequestMapping(value = "/lmm117Controller")
+public class Lmm117Controller extends BaseController {
+	
+	@Autowired
+	Lmm117ServiceImpl lmm117ServiceImpl;
+	
+	@Autowired
+	private Lmm101Service lmm101Service;
+
+	/**
+	 * 組織一覧画面の初期化処理
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/initPage", method = { RequestMethod.POST, RequestMethod.GET })
+	public ModelAndView initPage(HttpServletRequest request) {
+		// ModelAndViewの定義
+		ModelAndView modelAndView = new ModelAndView();
+		HttpSession session = request.getSession();
+
+		//页面初始化 报错信息, 字段值 都为null;
+		session.setAttribute("messages", null);
+		session.setAttribute("hashMap",null);
+		
+		// 検索範囲の初期値を２に設定する
+	    String searchScope_Rdo = "2";
+		// 初期表示データ検索範囲 の設定 
+		modelAndView.addObject("searchScope_Rdo", searchScope_Rdo);
+		
+		// ページ遷移
+		modelAndView.setViewName("/lmm117/lmm117");
+		return modelAndView;
+	}
+	
+	/**
+	 * 正则验证
+	 */
+	public  ModelAndView regAll(HashMap<String, String> hashMap,
+			HttpServletRequest request) {
+		
+		//得到对应的键值,对其验证;
+		String appOrgCode_Txt = hashMap.get("appOrgCode_Txt");
+		
+		//定义正则
+		String regLength="^[0-9A-z]{0,12}$";
+		String regTxt="[0-9A-z]";
+		
+		Pattern patternLength=Pattern.compile(regLength);
+		Pattern patternTxt=Pattern.compile(regTxt);
+		
+		Matcher matcher = patternLength.matcher(appOrgCode_Txt);
+		boolean findLength = matcher.find();  //判断长度是否匹配
+		
+		boolean findTxt=patternTxt.matcher(appOrgCode_Txt).find();  // 判断内容是否是 0-9A-Z
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/lmm117/lmm117");
+		
+		if(!findTxt) {  //如果内容不匹配
+			String [] messages= {"申請組織コード"};
+			super.saveMessage(MessageSource.getText(request, "LVB-004010", messages));
+			return modelAndView;
+		} else { // 如果内容匹配 但 长度不匹配
+			if (!findLength) {
+				String[] messages = { "申請組織コード", "12" };
+				String text = MessageSource.getText(request, "LVB-004030", messages);
+				super.saveMessage(text);
+				return modelAndView;
+			}
+		}
+		
+		return modelAndView;
+	}
+	
+	/**
+	 * 检索按钮按下事件
+	 * 
+	 * @param hashMap
+	 * @return
+	 */
+	@RequestMapping(value = "/findSomeField")
+	public ModelAndView findSomeField(@RequestParam HashMap<String, String> hashMap,
+			HttpServletRequest request) {
+		
+		//判断aboflag 的状态
+		if("on".equals(hashMap.get("searchScope_Rdo"))) {
+			hashMap.put("aboflag", "0");
+		}else {
+			hashMap.put("aboflag", "1");
+		}
+		
+		//汎用区分＝"5002"（主輸送モード区分）																
+		hashMap.put("gnrprpkbn", Constants.gnrprpkbn);
+		
+		//刷新页面时 messages 信息 清空, 字段值保留
+		HttpSession session = request.getSession();
+		session.setAttribute("messages", null);
+		session.setAttribute("hashMap", hashMap);
+		
+		/*如果检索发生异常,则	LVB-009001						
+		検索時にエラーが発生した場合、以下のメッセージを出力し、以降の処理を実施しない。*/		
+		List<Lmm117ResultType> findSomeField =null;
+		try {
+			/* 调用service层方法,得到数据库的查询结果 */
+			findSomeField = lmm117ServiceImpl.findSomeField(hashMap);
+		}catch(Exception e){
+			super.saveMessage(MessageSource.getText(request, "LVB-009001"));
+		}
+		
+		/*
+		 * 如果list长度为0,则在前台 显示信息 LVB-004017 
+		 * 【メッセージID】 LVB-004017 ： 検索条件に該当するデータが存在しません。
+		 * ログを出力する。 出力内容は以下の通り メッセージ LVB-004017 
+		 * 文字置換 なし 
+		 * 如果list长度大于总长度,则在前台 显示信息
+		 * LVB-004018 最大表示件数を超えたため{0}件まで表示します。 
+		 * 文字置換 セッション情報.最大表示上限数
+		 */
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/lmm117/lmm117");
+		
+		//先判断正则 是否符合
+		this.regAll(hashMap,request);
+		
+		if (findSomeField.size() == 0) {
+			super.saveMessage(MessageSource.getText(request, "LVB-004017"));
+			return modelAndView;
+		} else if (findSomeField.size() > findAll().size()) {
+			String[] messagesArgs = { "セッション情報.最大表示上限数" };
+			super.saveMessage(MessageSource.getText(request, "LVB-004018", messagesArgs));
+			return modelAndView;
+		}else {
+			/*
+			 * 正确显示情况 : 把结果放到model中,返回jsp
+			 */
+			modelAndView.addObject("list", findSomeField);
+			return modelAndView;
+		}
+	}
+
+	@RequestMapping(value = "/findAll")
+	public List<HashMap<String, Object>> findAll() {
+		List<HashMap<String, Object>> findAll = lmm117ServiceImpl.findAll();
+		return findAll;
+	}
+	
+}

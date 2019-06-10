@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cloud.mapper.Lmm113Mapper">
+	
+	<select id="quallByy" resultType="Hashmap" parameterType="String">
+		select t1.*, t2.coalpha3, t3.tmeznenam, t4.*
+		  from lmmmplc t1
+		  left join lmmmco t2 on t1.ctrcod = t2.coalpha3
+		  left join lmmmtmz t3 on t1.tmeznecod = t3.tmeznenam
+		  left join lmmmorg t4 on t4.tntcod = t1.tntcod
+		   and t4.orgcod = t1.apporgcod
+		   and t4.appstaymdhms &lt;= sysdate and sysdate &lt;= t4.appendymdhms
+		   and t4.aboflg = 0
+		<where>
+						
+			<!--申請組織コード　前方一致　画面．申請組織コード	 -->																					
+			<if test="appOrgCode_Txt !=null and appOrgCode_Txt !=''">
+				AND t1.apporgcod like '${appOrgCode_Txt}%'
+			</if>
+			
+			<!-- 場所コード　前方一致　画面．場所コード		-->
+			<if test="plcCode_Txt !=null and plcCode_Txt !=''">
+				AND t1.plccod like '${plcCode_Txt}%'
+			</if>
+			
+			<!-- 場所名　部分一致　画面．場所名		 -->										
+			<if test="plcName_Txt !=null and plcName_Txt !=''">
+				AND t1.plcnam like '%${plcName_Txt}%'
+			</if>
+			
+			<!-- （選択範囲で「廃止を除く」が選択された場合次の条件を加える） -->																						
+			<if test="searchScope_Rdo==2">
+				AND t1.aboflg= #{aboflg}
+			</if>
+			
+		</where>
+		
+			order by t1.apporgcod asc,t1.plccod asc
+			
+	</select>
+				
+</mapper>

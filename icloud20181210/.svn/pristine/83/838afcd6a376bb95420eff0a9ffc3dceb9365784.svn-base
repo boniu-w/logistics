@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Slvb116Mapper">
+	<!-- 申請組織コードが組織マスタに登録の場合作成処理 -->
+	<select id="query" parameterType="lmmmorg" resultType="lmmmorg">
+		select orgcod,		 <!--   組織コード   -->
+		appstaymdhms,		 <!-- 適用開始日時 -->
+		appendymdhms,		 <!-- 適用終了日時 -->
+		orgnam1,			 <!-- 組織名1-->
+		orgnam2,			 <!-- 組織名2-->
+		orgnam3,			 <!-- 組織名3-->
+		orgnam4,			 <!-- 組織名4-->
+		orgnam5				 <!-- 組織名5-->
+		from LMMMORG
+		<where>
+			tntcod=#{tntcod,jdbcType=VARCHAR}
+			<if test="orgcod != null and orgcod != '' ">
+				and orgcod like concat(#{orgcod,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="orgnam1 != null and orgnam1 != '' ">
+				and orgnam1 like
+				concat('%',concat(#{orgnam1,jdbcType=VARCHAR},'%'))
+			</if>
+			and appstaymdhms &lt;= sysdate
+			and appendymdhms &gt;= sysdate
+			and aboflg = 0
+		</where>
+		order by orgcod desc
+	</select>
+</mapper>  

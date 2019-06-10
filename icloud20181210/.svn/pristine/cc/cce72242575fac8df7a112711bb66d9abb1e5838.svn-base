@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm119Mapper">
+    
+    <!-- o获取トラッキングG別イベント一覧显示ないよう -->
+    <select id="seleteTransportData" resultType="Lmmmtrkg2" parameterType="String">
+        select 
+      		t1.aboflg, 
+      		t2.orgnam1, 
+      		t1.trkgrpcod, 
+      		t1.trkgrpnam, 
+      		t4.updeac
+      	from 
+      		LMMMTRKG t1 ,
+      	(
+           select 
+           		t3.tntcod, 
+           		t3.trkgrpcod, 
+           		COUNT( * ) as updeac 
+           from	
+           		LMMMTRKEVT t3										
+           where 
+                 t3.tntcod = #{tntcod}  
+                 GROUP BY  t3.tntcod, t3.trkgrpcod 
+                 HAVING t3.tntcod = t3.trkgrpcod
+      	) t4
+      	Left Join LMMMORG t2 on   
+      		t2.tntcod = #{tntcod} AND t2.orgcod = #{apporgcod} and 
+      		t2.appstaymdhms &lt;= sysdate and sysdate &lt;= t2.appendymdhms	and
+      		t2.aboflg = #{aboflg}
+    	<where> 
+    		t1.tntcod = #{tntcod}
+    		
+    		<!-- トラッキングＧコード欄に入力値がある場合 
+    		ＡＮＤ トラッキングGコード　前方一致：トラッキングGコード欄入力値 -->
+    		<if test=" trkgrpnam != null and trkgrpnam != '' ">
+				and t1.trkgrpnam like '%${trkgrpnam}%' 
+			</if>
+			
+			<!-- トラッキングＧ名称欄に入力値がある場合 AND 
+			ＡＮＤ　トラッキングＧ名称　部分一致：トラッキングＧ名称欄入力値 -->
+    		<if test=" trkgrpcod != null and trkgrpcod != '' ">
+				and t1.trkgrpcod like '${trkgrpcod}%'
+			</if>
+			
+			<!-- 申請組織コード欄に入力値がある場合
+			ＡＮＤ　申請組織コード　前方一致：申請組織コード欄入力値 -->
+			<if test=" apporgcod != null and apporgcod != '' ">
+				and t1.apporgcod like '${apporgcod}%' 
+			</if>
+			
+			<!-- 検索範囲が「廃止を除く」の場合
+			ＡＮＤ　廃止フラグ＝オフ -->
+			<if test=" aboflg != null and aboflg !='' ">
+				and t1.aboflg = #{aboflg}
+    		</if>
+    	</where> 
+    </select>
+
+</mapper>

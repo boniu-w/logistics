@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cloud.mapper.Lmm116Mapper">
+<!--汎用区分のセレクトリストを作成する-->
+	<select id="selectFind" resultType="lmmmgrl"
+		parameterType="String">
+		select
+		distinct gnrprpkbn  <!-- 汎用区分 -->
+		from lmmmgrl         
+		where tntcod=       <!-- テナントコード -->
+		#{tntcod}
+	</select>
+	<!--汎用マスタ新规処理-->
+	<insert id="insert" parameterType="lmmmgrl">
+		insert into lmmmgrl
+		(tntcod,            <!-- テナントコード -->
+		gnrprpkbn,			<!-- 汎用区分 -->
+		gnrprpcod,			<!-- 汎用コード -->
+		codoutcod,			<!-- コード種別 -->
+		gnrprpnam1,			<!-- 汎用名１ -->
+		gnrprpnam2,			<!-- 汎用名２ -->
+		apporgcod)			<!-- 申請組織コード-->
+		values
+		(#{tntcod},			
+		#{gnrprpkbn},		
+		#{gnrprpcod},	
+		#{codoutcod},		
+		#{gnrprpnam1},		
+		#{gnrprpnam2},		
+		#{apporgcod})		
+	</insert>
+	<!-- 二重登録チェック	-->
+	<select id="check" parameterType="lmmmgrl" resultType="INTEGER">
+		 select
+		 count(GNRPRPKBN)					<!-- 汎用区分 -->
+		 from LMMMGRL 
+		 where GNRPRPKBN=#{gnrprpkbn}
+		 and GNRPRPCOD=#{gnrprpcod}
+		 and tntcod=#{tntcod}
+	</select>
+	<!--更新の初期化表示情報の処理  -->
+	<select id="Pupdate" parameterType="lmmmgrl"
+		resultType="lmmmgrl">
+		select
+		gnrprpkbn,			<!-- 汎用区分 -->
+		gnrprpcod,			<!-- 汎用コード -->
+		codoutcod,			<!-- コード種別 -->
+		gnrprpnam1,			<!-- 汎用名１ -->
+		gnrprpnam2,			<!-- 汎用名２ -->
+		apporgcod,			<!-- 申請組織コード-->
+		aboflg,				<!-- 廃止フラグ-->
+		updeac 				<!-- 更新回数 -->
+		updymdhms			<!-- 登録年月日時分秒 -->
+		from
+		lmmmgrl 
+		where tntcod=#{tntcod}
+		and gnrprpkbn=#{gnrprpkbn}
+		and gnrprpcod=#{gnrprpcod}
+	</select>
+	<!-- 汎用マスタ更新処理 -->
+	<update id="update"  parameterType="Lmmmgrl">
+		update lmmmgrl 
+		<set>
+			<!-- 汎用区分 -->
+			<if test="gnrprpkbn != null and gnrprpkbn != '' " >
+				gnrprpkbn=#{gnrprpkbn},
+			</if>
+			<!-- 汎用コード -->
+			<if test="gnrprpcod != null and gnrprpcod != '' " >
+				gnrprpcod=#{gnrprpcod},
+			</if>
+			<!-- コード種別 -->
+			<if test="codoutcod != null" >
+				codoutcod=#{codoutcod},
+			</if>
+			<!-- 汎用名１ -->
+			<if test="gnrprpnam1 != null" >
+				gnrprpnam1=#{gnrprpnam1},
+			</if>
+			<!-- 汎用名２ -->
+			<if test="gnrprpnam2 != null" >
+				gnrprpnam2=#{gnrprpnam2},
+			</if>
+			<!-- 申請組織コード-->
+			<if test="apporgcod != null" >
+				apporgcod=#{apporgcod},
+			</if>
+			<!-- 廃止フラグ-->
+			<if test="aboflg != null and aboflg != '' " >
+				aboflg=#{aboflg},
+			</if>
+			<!-- 更新回数 -->
+				updeac=updeac+1
+		</set>
+		  where  tntcod=#{tntcod} 
+            and gnrprpkbn = #{gnrprpkbn}
+            and gnrprpcod = #{gnrprpcod,jdbcType=NUMERIC}
+            and updeac = #{updeac,jdbcType=NUMERIC}
+	</update>
+</mapper>

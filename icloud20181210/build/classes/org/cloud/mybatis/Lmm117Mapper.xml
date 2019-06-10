@@ -10,8 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 		left join LMMMORG rg
 		on pt.tntcod=rg.tntcod
-		and rg.appstaymdhms &lt;=sysdate
-		and sysdate &lt;=rg.appendymdhms
+		and sysdate &gt;= rg.appstaymdhms
+		and sysdate &lt;= rg.appendymdhms
 		and rg.aboflg=0
 
 		left join lmmmplc plc1

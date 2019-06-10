@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm115Mapper">
+
+  <select id="findGnrprpKbn_Sct" resultType="Lmmmgrl"  parameterType="String">
+    select 
+       gnrprpkbn 
+    from Lmmmgrl 
+       where tntcod=#{grltntcod}
+  
+  </select>
+ 
+  
+  <select id="findTable115" resultType="Hashmap"  parameterType="String">
+     select  g.aboflg,
+             g.gnrprpkbn,
+             g.gnrprpcod,
+             g.codoutcod, 
+             g.gnrprpnam1, 
+             g.gnrprpnam2, 
+             g.apporgcod
+     from Lmmmgrl g 
+         
+     <where>
+     
+        <!-- dテナントコード＝ログインユーザのテナントコード（セッションから取得） -->
+         g.tntcod = '11001006'
+         
+          <!-- p申請組織コード　前方一致　画面．申請組織コード -->
+         <if test="appOrgCode_Txt != null and appOrgCode_Txt != ''">
+            and g.apporgcod like '${appOrgCode_Txt}%'        
+         </if>
+                 
+         <!-- p汎用区分　＝　画面．汎用区分 -->
+         <if test="gnrprpKbn_Sct != null and gnrprpKbn_Sct != ''">
+            and g.gnrprpkbn = #{gnrprpKbn_Sct}
+         </if>                 
+         
+         <!-- p汎用コード　前方一致　画面．汎用コード -->
+         <if test="gnrprpCode_Txt != null and gnrprpCode_Txt != ''">
+            and g.gnrprpcod like '${gnrprpCode_Txt}%'        
+         </if>
+         
+         <!-- p汎用名１　部分一致　画面．汎用名１ -->
+         <if test="gnrprpName1_Txt != null and gnrprpName1_Txt != ''">
+            and g.gnrprpnam1 like '%${gnrprpName1_Txt}%'        
+         </if>
+         
+         <!-- p（選択範囲で「廃止を除く」が選択された場合次の条件を加える）  廃止フラグ=0 -->
+         <if test="searchScope_Rdo == 2">
+            and g.aboflg = '0'        
+         </if>
+         
+         
+     </where>
+     
+        <!-- g申請組織コード＞汎用区分＞汎用コード -->
+        order by g.apporgcod asc, g.gnrprpkbn asc, g.gnrprpcod asc
+  
+  </select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm112Mapper">
+   
+    <!-- 組織コードのセレクトリストの作成 -->
+    <select id="orgSelect" resultType="lmmmorgitm" parameterType="llmmmorgitm">
+        select *
+               from Lmmmorgitm lg
+        where
+            lg.tntcod = #{tntcod} and            
+            #{date} between lg.appstaymdhms and lg.appendymdhms and                   
+            lg.aboflg=#{aboflg}
+    </select>
+    
+    <!-- 登録の結果、処理日時点の有効データが存在しなくなる場合、ウォーニング（更新はする） -->
+    
+    <select id="addCheckDate"  resultType="int" parameterType="Date">
+       select count(*) 
+           from Lmmmorgitm lg
+       where
+           sysdate between #{datestar} and #{datend}
+       
+    </select>
+    
+    <!-- 組織コードが組織マスタに未登録の場合 -->
+    <select id="orgCodCheck" resultType="int" parameterType="lmmmorg">
+    
+      select count(*)
+      
+          from lmmmorg lm
+          
+      where 
+          lm.tntcod=#{tntcod} and
+          lm.orgcod=#{orgcod} and
+          sysdate between #{appstaymdhms} and #{appendymdhms} and
+          lm.aboflg=#{aboflg}          
+    </select>
+    
+    <!-- 申請組織コードが組織マスタに未登録の場合 -->
+    <select id="appOrgCodCheck" resultType="int" parameterType="lmmmorg">
+      select count(*)
+          from lmmmorg lm
+      where 
+          lm.tntcod=#{tntcod} and
+          lm.orgcod=#{apporgcod} and
+          sysdate between #{appstaymdhms} and #{appendymdhms} and
+          lm.aboflg=#{aboflg}          
+    </select>
+    
+    
+    <!-- 新規二重チェック -->
+    <select id="addCheck" resultType="int" parameterType="lmmmorgitm">
+       select count(*) 
+           from lmmmorgitm lg
+       where 
+           lg.tntcod=#{tntcod} and
+           lg.orgcod=#{orgcod} and
+           lg.orgitmcod=#{orgitmcod} and
+           lg.appstaymdhms=#{appstaymdhms}
+    </select>
+    
+    <!-- 更新初期表示 -->
+    <select id="updateSelect" resultType="Lmm112Dtor" parameterType="lmmmorgitm">
+        select 
+             <!-- lorg.*, lmi.itmnam1 -->
+            lorg.orgcod,　　　　     <!-- 組織コード -->
+            lorg.orgitmcod,　　　　<!-- 組織別商品コード --> 
+            lorg.appstaymdhms,　　<!-- 適用開始日時 -->
+            lorg.appendymdhms,　　<!-- 適用終了日時 -->
+            lorg.orgitmnam,　　　　<!-- 組織別商品名 -->
+            lorg.itmcod,　　　　　　<!-- 商品コード -->
+            lmi.itmnam1,           <!-- 商品マスタ．商品名  -->　
+            lorg.apporgcod,　　　　<!-- 申請組織コード -->
+            lorg.aboflg,　　　　　　<!-- 廃止フラグ -->
+            lorg.updeac　　　　　　　<!-- 更新回数 -->
+        from 
+            Lmmmorgitm lorg left join Lmmmitm lmi
+            on  lorg.itmcod=lmi.itmcod 
+        where
+            lorg.tntcod=#{tntcod} and 
+            lorg.orgcod=#{orgcod} and
+            lorg.orgitmcod=#{orgitmcod} and
+            lorg.appstaymdhms=#{appstaymdhms} 
+            
+            
+            
+            <!-- lorg.itmcod=lmi.itmcod -->
+    </select>
+    
+    <!--新規add処理  -->
+    <insert id="add" parameterType="Lmmmorgitm">
+        insert into  Lmmmorgitm (
+            tntcod,
+            aboflg,          <!-- 廃止フラグ -->
+            orgcod,          <!-- 組織コード -->
+            orgitmcod,       <!--組織別商品コード  -->
+            appstaymdhms,    <!-- 適用開始日時 -->
+            appendymdhms,    <!-- 適用終了日時 -->
+            orgitmnam,　　　    <!-- 組織別商品名 -->
+            apporgcod,　　　　<!-- 申請組織コード -->
+            insymdhms,       <!-- 登録年月日時分秒 -->
+            insnam,          <!-- 登録者 -->
+            inskbn,          <!-- 登録者区分 -->
+            insmethodkbn,    <!-- 登録方法区分 -->
+            updymdhms,       <!-- 更新年月日時分秒 -->
+            updnam,          <!-- 更新者 -->
+            updkbn,          <!-- 更新者区分 -->
+            updmethodkbn,    <!-- 更新方法区分 -->
+            updeac           <!-- 更新回数 -->
+        ) values (
+            #{tntcod},
+            #{aboflg},
+            #{orgcod},
+            #{orgitmcod},
+            #{appstaymdhms},
+            #{appendymdhms},
+            #{orgitmnam},
+            #{apporgcod},
+            #{insymdhms},
+            #{insnam},
+            #{inskbn},
+            #{insmethodkbn},
+            #{updymdhms},
+            #{updnam},
+            #{updkbn},
+            #{updmethodkbn},
+            #{updeac}       
+        )  
+    </insert>
+    
+    
+    <!-- 商品コードで商品名を取得する -->
+     <select id="findItmName" resultType="lmmmitm" parameterType="String">    
+        select itmnam1
+               from Lmmmitm 
+        where
+            itmcod= #{itmCode}
+    </select>
+    
+     <!--更新回数排他制御 -->
+     <select id="updeac" resultType="lmmmorgitm" parameterType="lmmmorgitm">
+        select * from lmmmorgitm        	
+            where tntcod= #{tntcod} and
+           	orgcod = #{orgcod} and appstaymdhms = #{appstaymdhms} and updeac = #{updeac}
+    </select>
+    
+    <!-- 更新update -->
+    <update id="update"  parameterType="lmmmorgitm">
+        update Lmmmorgitm
+        <set> 
+        
+           <if test="aboflg != null and aboflg !=''">
+            aboflg = #{aboflg},
+            </if>  
+            <if test="appendymdhms != null">
+            appendymdhms = #{appendymdhms,jdbcType=TIMESTAMP},
+            </if> 
+            <if test="orgitmnam != null and orgitmnam !=''">
+            orgitmnam = #{orgitmnam},
+            </if> 
+           <if test="apporgcod != null and apporgcod !=''">
+            apporgcod = #{apporgcod},
+            </if> 
+           
+           <if test="updymdhms != null">
+             updymdhms = sysdate,
+            </if> 
+           <if test="updnam != null and updnam !=''">
+            updnam = #{updnam},
+            </if>
+            <if test="updkbn != null and updkbn !=''">
+            updkbn = #{updkbn},
+            </if> 
+           <if test="updmethodkbn != null and updmethodkbn !=''">
+           updmethodkbn = #{updmethodkbn},
+           </if>
+            <if test="updeac != null">
+            updeac = #{updeac,jdbcType=NUMERIC}+1
+            </if> 
+    </set>  
+            where  
+                tntcod = #{tntcod}  and
+                orgcod = #{orgcod}  and 
+                orgitmcod = #{orgitmcod}  and
+                appstaymdhms = #{appstaymdhms} and
+                updeac = #{updeac}
+               
+    </update>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</mapper>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm108Mapper">
+	<!-- 更新の初期化表示情報 -->
+	<select id="selectOne" resultType="lmmmevtm"
+		parameterType="lmmmevtm">
+		select
+		TNTCOD,
+		EVTMRGCOD,
+		ABOFLG,
+		EVTMRGNAM,
+		DISPNUM,
+		APPORGCOD,
+
+		INSYMDHMS,
+		INSNAM,
+		INSKBN,
+		INSMETHODKBN,
+		UPDEAC,
+		UPDYMDHMS,
+		UPDNAM,
+		UPDKBN,
+		UPDMETHODKBN
+		from Lmmmevtm
+		where tntcod= #{tntcod} and
+		evtmrgcod= #{evtmrgcod}
+	</select>
+	<!-- 調査組織マットに関連データがありますか？ -->
+	<select id="selectLmmmorg" resultType="lmmmorg"
+		parameterType="lmmmorg">
+		select
+		TNTCOD,
+		ORGCOD,
+		ABOFLG,
+		ORGNAM1,
+		ORGNAM2,
+		ORGNAM3,
+		ORGNAM4,
+		ORGNAM5,
+		CTGCOD,
+		CTGNAM,
+		CHGNAM,
+		TELCOD,
+		FAXTELCOD,
+		MALNAM,
+		ORGKBN01,
+		ORGKBN02,
+		ORGKBN03,
+		ORGKBN04,
+		ORGKBN05,
+		ORGKBN06,
+		ORGKBN07,
+		ORGKBN08,
+		ORGKBN09,
+		ORGKBN10,
+		ORGKBN11,
+		ORGKBN12,
+		ORGKBN13,
+		ORGKBN14,
+		ORGKBN15,
+		ORGKBN16,
+		ORGKBN17,
+		ORGKBN18,
+		ORGKBN19,
+		ORGKBN20,
+		APPORGCOD,
+		APPSTAYMDHMS,
+		APPENDYMDHMS,
+		INSYMDHMS,
+		INSNAM,
+		INSKBN,
+		INSMETHODKBN,
+		UPDEAC,
+		UPDYMDHMS,
+		UPDNAM,
+		UPDKBN,
+		UPDMETHODKBN
+		from LMMMORG
+		where
+		LMMMORG.tntcod= #{tntcod}
+		and
+		LMMMORG.orgcod =
+		#{orgcod} and
+		sysdate between LMMMORG.appstaymdhms
+		and
+		LMMMORG.appendymdhms and
+		LMMMORG.aboflg=0
+	</select>
+	<select id="selectBeforeUpdate" resultType="lmmmevtm"
+		parameterType="lmmmevtm">
+		select
+		TNTCOD,
+		EVTMRGCOD,
+		ABOFLG,
+		EVTMRGNAM,
+		DISPNUM,
+		APPORGCOD,
+
+		INSYMDHMS,
+		INSNAM,
+		INSKBN,
+		INSMETHODKBN,
+		UPDEAC,
+		UPDYMDHMS,
+		UPDNAM,
+		UPDKBN,
+		UPDMETHODKBN
+		from Lmmmevtm
+		where tntcod= #{tntcod} and
+		evtmrgcod= #{evtmrgcod} and
+		updeac = #{updeac}
+	</select>
+	<!-- イベント集計マスタの更新処理 -->
+	<update id="update" parameterType="Lmmmevtm">
+		update lmmmevtm
+		<set>
+			<if test="evtmrgnam != null and evtmrgnam !=''">
+				evtmrgnam = #{evtmrgnam,jdbcType=VARCHAR},
+			</if>
+			<if test="dispnum != null and dispnum !=''">
+				dispnum = #{dispnum,jdbcType=VARCHAR},
+			</if>
+			<if test="apporgcod != null and apporgcod !=''">
+				apporgcod = #{apporgcod,jdbcType=VARCHAR},
+			</if>
+			<if test="aboflg != null and aboflg !=''">
+				aboflg = #{aboflg,jdbcType=VARCHAR},
+			</if>
+			<if test="insymdhms != null">
+				insymdhms = #{insymdhms},
+			</if>
+			<if test="insnam != null and insnam !=''">
+				insnam = #{insnam,jdbcType=VARCHAR},
+			</if>
+			<if test="inskbn != null and inskbn !=''">
+				inskbn = #{inskbn,jdbcType=VARCHAR},
+			</if>
+			<if test="insmethodkbn != null and insmethodkbn !=''">
+				insmethodkbn = #{insmethodkbn,jdbcType=VARCHAR},
+			</if>
+			updeac = updeac+1,
+			updymdhms = sysdate,
+			<if test="updnam != null and updmethodkbn !=''">
+				updnam = #{updnam,jdbcType=VARCHAR},
+			</if>
+			<if test="updkbn != null and updmethodkbn !=''">
+				updkbn = #{updkbn,jdbcType=VARCHAR},
+			</if>
+			<if test="updmethodkbn != null and updmethodkbn !=''">
+				updmethodkbn = #{updmethodkbn,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where tntcod=#{tntcod}
+		and evtmrgcod=#{evtmrgcod}
+		and updeac = #{updeac}
+	</update>
+	<!-- イベント集計マスタの新規処理 -->
+	<insert id="insert" parameterType="Lmmmevtm">
+		insert into lmmmevtm (
+		tntcod,
+		evtmrgcod,
+		aboflg,
+		evtmrgnam,
+		dispnum,
+		apporgcod,
+		insymdhms,
+		insnam,
+		inskbn,
+		insmethodkbn,
+		updeac,
+		updymdhms,
+		updnam,
+		updkbn,
+		updmethodkbn
+		)values(
+		#{tntcod},
+		#{evtmrgcod,jdbcType=VARCHAR},
+		#{aboflg},
+		#{evtmrgnam,jdbcType=VARCHAR},
+		#{dispnum,jdbcType=VARCHAR},
+		#{apporgcod,jdbcType=VARCHAR},
+		#{insymdhms,jdbcType=TIME},
+		#{insnam,jdbcType=VARCHAR},
+		#{inskbn,jdbcType=VARCHAR},
+		#{insmethodkbn,jdbcType=VARCHAR},
+		#{updeac,jdbcType=NUMERIC},
+		#{updymdhms,jdbcType=TIME},
+		#{updnam,jdbcType=VARCHAR},
+		#{updkbn,jdbcType=VARCHAR},
+		#{updmethodkbn,jdbcType=VARCHAR})
+	</insert>
+
+</mapper>

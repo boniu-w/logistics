@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.cloud.mapper.Lmm109Mapper">
+	<select id="selectBy109" resultType="HashMap" parameterType="String">
+		select
+		t.aboflg,
+		t.itmcod,
+		to_char(t.appstaymdhms,'yyyy-MM-dd') as appstaymdhms,
+		to_char(t.appendymdhms,'yyyy-MM-dd') as appendymdhms,
+		t.itmnam1,
+		t.tntcod,
+		t2.orgnam1 
+		from lmmmitm t
+		left join lmmmorg t2
+	    on t2.tntcod=t.tntcod 
+	    and t2.apporgcod=t.apporgcod and 
+	    t2.aboflg=0 and sysdate between 
+	    t2.appstaymdhms  
+	    and t2.appendymdhms
+		<where>
+		      <!-- テナントコード＝ログインユーザのテナントコード	 -->																		
+		      t.tntcod = #{tnocod_Txt} 
+		     
+		     <!--  	（選択範囲で「適用期間内」が選択された場合次の条件を加える）																		 -->						
+		     <if test="searchScope_Rdo==2">
+		       and t.appstaymdhms &lt;= sysdate and t.appendymdhms &gt;=sysdate
+		     </if>
+		     	
+		     <!-- 申請組織コード　前方一致　画面．申請組織コード								 -->												
+		     <if test=" applyOrgCode_Txt != null  and applyOrgCode_Txt != ''">
+		       and t.apporgcod like '${applyOrgCode_Txt}%'
+		     </if>
+		     
+		     <!-- 商品コード　前方一致　画面．商品コード	 -->															
+		     <if test="itemCode_Txt !=null and itemCode_Txt != ''">
+		      and t.itmcod  like '${itemCode_Txt}%'
+		     </if>
+		    	
+		    <!-- 商品名１　部分一致　画面．商品名 -->													
+		     <if test="itemName_Txt != null and itemName_Txt !=''">
+		       and t.itmnam1 like '%${itemName_Txt}%' 
+		     <!-- and t.itmnam1 =#{itemName_Txt}-->
+		     </if>
+		 
+		</where>
+			<!-- 申請組織コード＞商品コード＞適用開始日時（降順）	 -->																		
+		     order by t.apporgcod ,  t.itmcod , t. appstaymdhms desc
+	</select>
+</mapper>
+

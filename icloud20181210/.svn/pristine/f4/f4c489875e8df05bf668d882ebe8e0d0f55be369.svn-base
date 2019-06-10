@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="org.cloud.mapper.Lmm105Mapper">
+
+
+<sql id="sql1">
+   tntcod,gnrprpkbn,gnrprpcod, aboflg,codoutcod, gnrprpnam1,gnrprpnam2,apporgcod,insymdhms,insnam, inskbn,
+   insmethodkbn, updeac,updymdhms,updnam, updkbn,updmethodkbn
+  </sql>
+  
+<!-- 初期処理 -->
+<select id="findAllLmm105" resultType="LmmmgrlLmm105"  parameterType="String">
+  select  t.gnrprpcod from lmmmgrl t where t.tntcod= #{tntcod}
+                                              
+  </select> 
+
+<!-- 一覧検索処理 -->
+<select id="findByLmm105" resultType="LmmmgrlLmm105"  parameterType="String">
+  select <include refid="sql1"></include> 
+         <!-- from lmmmgrl t --> 
+  where  
+ t.tntcod=#{tntcod}, 
+ t.aboflg=#{aboflg},
+ t.codoutcod=#{codoutcod}
+ 
+ <if test="gnrprpnam != null and gnrprpnam !=''">
+                and t.apporgcod =#{apporgcod}
+                and t.gnrprpcod=#{gnrprpcod}
+                
+                </if>
+ 
+  <if test="nrprpnam1 != null and nrprpnam1 !=''">
+                and t.gnrprpnam1 like '%${gnrprpnam1}%'
+                and gnrprpnam2=null
+            </if>   
+            
+            <if test="nrprpnam2 != null and nrprpnam2 !=''">
+                and t.gnrprpnam2 like '%${gnrprpnam2}%'
+                and gnrprpnam1=null
+            </if>   
+            
+       ORDER BY
+		t.apporgcod ASC,t.gnrprpcod ASC,gnrprpnam1 ASC,gnrprpnam2 ASC     
+                 
+                     
+  </select>
+
+
+
+
+
+
+
+<!--新規ボタン-->
+ <insert id="insert" parameterType="LmmmgrlLmm105">
+        insert into lmmmgrl t (
+            tntcod,gnrprpkbn,gnrprpcod, aboflg,codoutcod, gnrprpnam1,gnrprpnam2,apporgcod,insymdhms,insnam, inskbn,
+   insmethodkbn, updeac,updymdhms,updnam, updkbn,updmethodkbn
+            )values(
+            #{tntcod},#{gnrprpkbn},#{gnrprpcod}, #{aboflg},#{codoutcod},#{gnrprpnam1},#{gnrprpnam2},#{apporgcod},#{insymdhms},#{insnam}, #{inskbn},
+   #{insmethodkbn},#{updeac},#{updymdhms},#{updnam}, #{updkbn},#{updmethodkbn}
+    </insert>
+
+
+<!--変更ボタン  -->
+<update id="upDate"  parameterType="LmmmgrlLmm105">
+        update lmmmgrl t
+        <set>
+            <if test="tntcod != null and tntcod !=''">
+            tntcod = #{tntcod},
+            </if>
+            <if test="gnrprpkbn != null and gnrprpkbn !=''">
+            gnrprpkbn = #{gnrprpkbn},
+            </if>
+            <if test="gnrprpcod != gnrprpcod=''">
+            gnrprpcod = #{gnrprpcod},
+            </if>
+            <if test="aboflg != null and aboflg !=''">
+            aboflg = #{aboflg},
+            </if>
+            <if test="codoutcod != null and codoutcod !=''">
+            codoutcod = #{codoutcod},
+            </if>
+            <if test="gnrprpnam1 != null and gnrprpnam1 !=''">
+            gnrprpnam1 = #{gnrprpnam1},
+            </if>
+            <if test="gnrprpnam2 != null and gnrprpnam2 !=''">
+           gnrprpnam2 = #{gnrprpnam2},
+            </if>
+            <if test="apporgcod != null and apporgcod !=''">
+            apporgcod = #{apporgcod},
+            </if>
+            <if test="insymdhms != null and insymdhms !=''">
+            insymdhms = #{insymdhms},
+            </if>
+            <if test="insnam != null">
+            insnam = #{insnam},
+            </if>
+            <if test="inskbn != null">
+            updeac = #{inskbn, jdbcType=NUMERIC},
+            </if>
+            updymdhms = sysdate,
+            <if test="insmethodkbn != null and insmethodkbn !=''">
+            insmethodkbn = #{insmethodkbn},
+            </if>
+            <if test="updeac != null and updeac !=''">
+           updeac = #{updeac},
+            </if>
+            <if test="updymdhms != null and updymdhms !=''">
+            updymdhms = #{updymdhms},
+            </if>
+             <if test="updnam != null and updnam !=''">
+            updnam = #{updnam},
+            </if>
+            <if test="updkbn != null and updkbn !=''">
+            updkbn = #{updkbn},
+            </if>
+            <if test="updmethodkbn != null and updkbn !=''">
+            updmethodkbn = #{updmethodkbn}
+            </if>
+            
+        </set> 
+        where  tntcod=#{tntcod} 
+             </update>
+
+
+</mapper>

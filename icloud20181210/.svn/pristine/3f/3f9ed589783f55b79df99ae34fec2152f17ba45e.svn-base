@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Lmm114Mapper">
+
+<!-- 根据主键查询Lmmplc数据 -->
+    <select id="findLmmplcInfoByTntcodAndPlccod" resultType="gclmmmplc" parameterType="gclmmmplc">
+        select * 
+        	from lmmmplc
+         		where tntcod= #{tntcod} and
+           			 plccod = #{plccod} and ABOFLG = #{aboflg} 
+    </select>
+<!-- 查询GcLmmmplcDto数据  -->
+     <select id="findLmmplcDtoInfoByTntcodAndPlccod" resultType="gclmmmplcDto" parameterType="gclmmmplc">
+        select * 
+        	from lmmmplc
+         		where tntcod= #{tntcod} and
+           			 plccod = #{plccod} and ABOFLG = #{aboflg} 
+    </select> 
+    
+<!-- 查询GcLmmmco数据 -->
+     <select id="findLmmplcAllGcLmmmcoInfo" resultType="gcLmmmco" parameterType="String">
+        select * 
+        	from Lmmmco
+     </select>
+<!-- 查询GcLmmmtmz数据 -->
+      <select id="findLmmplcAllGcLmmmtmzInfo" resultType="gcLmmmtmz" parameterType="String">
+        select * 
+        	from Lmmmtmz where ABOFLG = #{aboflg}
+     </select>
+     
+<!-- 新规验证 -->
+     <select id="yanZhengXingui" resultType="int" parameterType="gcLmmmy">
+     
+       select count(*) from lmmmplc t where t.tntcod=#{tntcod}
+       
+       and t.plccod = #{plccod}
+        
+      </select>
+      
+      
+      <!-- 新规验证 -->
+     <select id="yanZhengXinguis" resultType="int" parameterType="gcLmmmy">
+     
+       select count(*) from lmmmorg g where g.tntcod=#{tntcod}
+       
+       and g.orgcod=#{apporgcod} and g.aboflg = #{aboflg} and #{datee} between g.appstaymdhms and g.appendymdhms
+       
+      </select>
+
+       
+<!-- 新規処理 -->
+    <insert id="Xingui" parameterType="lmmmplc">
+    
+        insert into lmmmplc (
+            plccod,
+            aboflg,
+            plcnam,
+            adrnam1,
+            adrnam2,
+            adrnam3,
+            adrnam4,
+            zipcod,
+            ctrcod,
+            tmeznecod,
+            apporgcod, 
+            tntcod,
+            insymdhms,
+            insnam,
+            inskbn,
+            insmethodkbn,
+            updymdhms,
+            updnam,
+            updkbn,
+            updmethodkbn,
+            updeac
+            
+            )values(
+            #{plccod},
+            #{aboflg},
+            #{plcnam},
+            #{adrnam1},
+            #{adrnam2},
+            #{adrnam3},
+            #{adrnam4},
+            #{zipcod},
+            #{ctrcod},
+            #{tmeznecod},
+            #{apporgcod}, 
+            #{tntcod} ,
+            #{insymdhms},
+            #{insnam},
+            #{inskbn},
+            #{insmethodkbn},
+            #{updymdhms},
+            #{updnam},
+            #{updkbn},
+            #{updmethodkbn},
+            #{updeac} 
+            )
+    </insert> 
+   
+<!-- 更新验证-->
+      <select id="GengxinYanZ" resultType="int" parameterType="gcLmmmorg">
+    
+      select count(*) from lmmmorg lg 
+           where lg.tntcod =#{tntcod} and  
+             lg.orgcod=#{apporgcod} and #{date} between lg.appstaymdhms and lg.appendymdhms 
+             
+             and aboflg=#{aboflg}
+
+    </select> 
+    
+       
+ <!--验证更新回数 -->
+        <select id="Gengxin" resultType="gclmmmplc" parameterType="gclmmmplc">
+        select * 
+        	from lmmmplc
+         		where tntcod= #{tntcod} and
+           			 plccod = #{plccod} and updeac = #{updeac}
+    </select>
+       
+ 
+    <!-- 組織情報の更新処理 -->
+    <update id="Gengxinj"  parameterType="lmmmplc">
+        update lmmmplc
+        
+        set 
+            aboflg = #{aboflg},
+           
+            plcnam = #{plcnam},
+         
+            adrnam1 = #{adrnam1},
+         
+            adrnam2 = #{adrnam2},
+       
+            adrnam3 = #{adrnam3},
+       
+            adrnam4 = #{adrnam4},
+         
+            zipcod = #{zipcod},
+         
+            ctrcod = #{ctrcod},
+          
+            tmeznecod = #{tmeznecod},
+         
+            apporgcod = #{apporgcod},
+            
+            updymdhms=#{updymdhms},
+            
+            updnam = #{updnam},
+       
+            updkbn = #{updkbn},
+         
+            updmethodkbn = #{updmethodkbn},
+         
+            updeac = 1
+         
+           where tntcod=#{tntcod} 
+                and plccod=#{plccod}
+    </update>
+   
+       
+</mapper>

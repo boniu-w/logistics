@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cloud.mapper.Slvb108Mapper">
+    <!-- マスタイの関連情報を調べます。 -->
+    <select id="query" resultType="map" parameterType="map">
+		select orgcod,
+		       appstaymdhms,
+		       appendymdhms,
+		       orgnam1,
+		       orgnam2,
+		       orgnam3,
+		       orgnam4,
+		       orgnam5
+		  from LMMMORG
+		<where>
+		tntcod = #{tntcod, jdbcType=VARCHAR}
+		<if test="orgCode_Txt != null and orgCode_Txt != '' ">
+			and orgcod like concat(#{orgCode_Txt, jdbcType=VARCHAR}, '%')
+		</if>
+		<if test="orgName1_Txt != null and orgName1_Txt != '' ">
+			and orgnam1 like concat('%', concat(#{orgName1_Txt, jdbcType=VARCHAR}, '%'))
+		</if>
+		<!-- and appstaymdhms &lt;= sysdate
+		and appendymdhms &gt;= sysdate -->
+		<if test="orgKbn_Rdo != null and orgKbn_Rdo != '' ">
+			and orgkbn02 = #{orgKbn_Rdo, jdbcType=VARCHAR}
+		</if>
+		and aboflg = 0
+		</where>
+		 order by orgcod desc
+    </select>
+</mapper>

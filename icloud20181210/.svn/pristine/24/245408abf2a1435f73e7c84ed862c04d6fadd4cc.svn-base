@@ -1,0 +1,187 @@
+package org.cloud.webapp.controller;
+
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import org.cloud.dto.Lmm111Dto;
+import org.cloud.dto.Lmm111DtoTo;
+import org.cloud.service.Lmm111Service;
+import org.cloud.webapp.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.util.MessageSource;
+
+/**    
+
+*  @author :ZPH
+
+*  @date 2019年5月22日 
+
+*  @parameter:
+
+*  @Explain 说明: 
+
+*/
+@Controller
+@RequestMapping ("/lmm111Controller")
+public class Lmm111Controller extends BaseController {
+	
+	@Autowired
+	private Lmm111Service lmm111Service;
+	
+	/**
+	 * 画面一覧画面の初期化処理
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/init", method = { RequestMethod.POST, RequestMethod.GET })
+	public ModelAndView init () {
+		
+		// ModelAndViewの定義
+		ModelAndView modelAndView = new ModelAndView ();
+		HttpSession session = request.getSession();
+		String tntcod = (String)session.getAttribute("tntcod");
+		
+		// 検索範囲の初期値を２に設定する
+	    String searchScope_Rdo = "2";
+		// 初期表示データ検索範囲 の設定 
+		modelAndView.addObject("searchScope_Rdo", searchScope_Rdo);
+		// 画面遷移
+		modelAndView.setViewName ("lmm111/lmm111");
+		// 返却　modelAndView
+		return modelAndView;
+	}
+	
+	/**
+	 *  findLmm111 検索ボタンのイベント
+	 * @param lmm111DtoTo 検索条件
+	 * @param request
+	 * @param model 一覧検索条件保持用の引数
+	 * @return
+	 * LVB-009001システム異常処理がCloudExceptionで行う
+	 */
+	@RequestMapping (value = "/findLmm111", method = { RequestMethod.POST, RequestMethod.GET } )
+    public ModelAndView findLmm111 (@ModelAttribute Lmm111DtoTo lmm111DtoTo, HttpServletRequest request, ModelMap model) {
+		
+		// ModelAndViewの定義
+		ModelAndView modelAndView = new ModelAndView ();
+		// 画面遷移
+		modelAndView.setViewName ("lmm111/lmm111");
+		HttpSession session = request.getSession();
+		String tntcod = (String)session.getAttribute("tntcod");
+		//　セッション情報最大表示上限数																					
+		int maxValue = Integer.parseInt((String) session.getAttribute("max"));
+		// 画面表示結果のリスト
+		List<Lmm111Dto>  list = new LinkedList<Lmm111Dto>();
+		// lmm111画面一覧の対象
+	    Lmm111Dto lmm111Dto;
+	    //ページの入来値を取得する
+		Integer searchScope_Rdo = lmm111DtoTo.getSearchScope_Rdo();
+        String appOrgCode_Txt = lmm111DtoTo.getAppOrgCode_Txt();
+        String orgCode_Txt = lmm111DtoTo.getOrgCode_Txt();
+        String orgItmCode_Txt = lmm111DtoTo.getOrgItmCode_Txt();
+        String orgItmName_Txt = lmm111DtoTo.getOrgItmName_Txt();
+        
+        // 更新から戻る場合、検索条件の保持   //入来する値が空であるかどうかを判断する
+        if (searchScope_Rdo == null) {
+       	 searchScope_Rdo = (Integer)model.get("searchScope_Rdo");
+        }
+        
+        if (appOrgCode_Txt == null) {
+       	 appOrgCode_Txt = (String)model.get("appOrgCode_Txt");
+        }
+        
+        if (orgCode_Txt == null) {
+       	 orgCode_Txt = (String)model.get("orgCode_Txt");
+        }
+        
+        if (orgItmCode_Txt == null) {
+       	 orgItmCode_Txt = (String)model.get("orgItmCode_Txt");
+        }
+        
+        if (orgItmName_Txt == null) {
+       	 orgItmName_Txt = (String)model.get("orgItmName_Txt");
+        }
+        
+        // modelAndViewへのデータ
+        modelAndView.addObject("searchScope_Rdo", searchScope_Rdo);
+        modelAndView.addObject("appOrgCode_Txt", appOrgCode_Txt);
+        modelAndView.addObject("orgCode_Txt", orgCode_Txt);
+        modelAndView.addObject("orgItmCode_Txt", orgItmCode_Txt);
+        modelAndView.addObject("orgItmName_Txt", orgItmName_Txt);
+        // 検索結果のリスト
+		List<HashMap<String, String>> findLmm111 = lmm111Service.findLmm111(lmm111DtoTo.getSearchScope_Rdo(), appOrgCode_Txt, orgCode_Txt, orgItmCode_Txt, orgItmName_Txt, tntcod);
+	    if (findLmm111 != null) {
+	    	//　検索結果の件数
+	    	int count = findLmm111.size();
+	    	// 検索結果が0件の場合 
+            if (count == 0) {
+                // 「LVB-004017:検索条件に該当するデータが存在しません。」表示される 
+                this.saveMessage(MessageSource.getText(request, "LVB-004017", null));
+                return modelAndView;
+            }
+            
+            // 検索結果が閾値を超えた場合
+            if (count > maxValue) {
+         	    count = maxValue;
+                // 「LVB-004018:最大表示件数を超えたため{0}件まで表示します。」表示される
+                this.saveMessage(MessageSource.getText(request, "LVB-004018", new String[] { "maxValue" }));    
+             }
+	    	
+            // findLmm111.subList(0, count);
+	    	for (int i = 0; i < count; i++) {
+	    		lmm111Dto = new Lmm111Dto();
+	    		Map object = (Map) findLmm111.get(i);
+	    		// テナントコード
+	            String orgItm_List_Tntcod = (String) object.get("TNTCOD");
+	            // 廃止フラグ
+	            String orgItm_List_Rboflg_Lbl = (String) object.get("ABOFLG");
+	            // 組織コード
+	    		String orgItm_List_Orgcod_Lbl =(String) object.get("ORGCOD");
+	    		// 組織別商品コード
+	            String orgItm_List_Orgitmcod_Lbl = (String) object.get("ORGITMCOD");
+	            // 適用開始日時
+	            String orgItm_List_AppStaYmdhms_Lbl = (String) object.get("APPSTAYMDHMS");
+	            // 適用終了日時
+	            String orgItm_List_AppEndYmdhms_Lbl = (String) object.get("APPENDYMDHMS");
+	            // 組織別商品名
+	            String orgItm_List_Orgitmnam_Lbl = (String) object.get("ORGITMNAM");
+	            // 商品コード
+	            String orgItm_List_Itmcod_Lbl = (String) object.get("ITMCOD");
+	            // 商品名
+	            String orgItm_List_Itmnam1_Lbl = (String) object.get("ITMNAM1");
+	            // 申請組織コード
+	            String orgItm_List_Apporgcod_Lbl = (String) object.get("APPORGCOD");
+	            
+	            //javabeanで保存
+                lmm111Dto.setTntcod(orgItm_List_Tntcod);
+                lmm111Dto.setAboflg(orgItm_List_Rboflg_Lbl);
+                lmm111Dto.setOrgcod(orgItm_List_Orgcod_Lbl);
+                lmm111Dto.setOrgitmcod(orgItm_List_Orgitmcod_Lbl);
+                lmm111Dto.setAppstaymdhms(orgItm_List_AppStaYmdhms_Lbl);
+                lmm111Dto.setAppendymdhms(orgItm_List_AppEndYmdhms_Lbl);
+                lmm111Dto.setOrgitmnam(orgItm_List_Orgitmnam_Lbl);
+                lmm111Dto.setItmcod(orgItm_List_Itmcod_Lbl);
+                lmm111Dto.setItmnam1(orgItm_List_Itmnam1_Lbl);
+                lmm111Dto.setApporgcod(orgItm_List_Apporgcod_Lbl);
+                // 返却用リストに設定する
+	    		list.add(lmm111Dto);
+			}
+	    }
+	    //一覧明細表示のため、listLmm111DtoをmodelAndViewに置き
+	    modelAndView.addObject("list", list);
+       	return modelAndView;
+    }
+	
+	
+	
+}
+
